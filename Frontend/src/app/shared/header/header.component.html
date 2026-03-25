@@ -1,0 +1,53 @@
+<mat-toolbar class="navbar">
+
+  <!-- Glow layer -->
+  <div class="nav-glow"></div>
+
+  <!-- Left -->
+  <div class="nav-left">
+    <div class="logo">Amenity Hub</div>
+  </div>
+
+  <!-- Center -->
+  <div class="nav-center">
+
+    <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+    <a class="nav-link" routerLink="/bookings" routerLinkActive="active">Bookings</a>
+
+    <a class="nav-link"
+       *ngIf="user?.role === 'admin'"
+       routerLink="/admin/dashboard"
+       routerLinkActive="active">
+       Dashboard
+    </a>
+
+    <!-- Moving indicator -->
+    <div class="nav-indicator"></div>
+
+  </div>
+
+  <!-- Right -->
+  <div class="nav-right">
+
+    <ng-container >
+
+      <div class="profile" [matMenuTriggerFor]="menu">
+        <div class="avatar"></div>
+      </div>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Someone.com</button>
+        <button mat-menu-item routerLink="/profile">Profile</button>
+        <button mat-menu-item >Logout</button>
+      </mat-menu>
+
+    </ng-container>
+
+    <ng-template #guest>
+      <button class="btn ghost" routerLink="/login">Login</button>
+      <button class="btn primary" routerLink="/register">Register</button>
+    </ng-template>
+
+  </div>
+
+</mat-toolbar>

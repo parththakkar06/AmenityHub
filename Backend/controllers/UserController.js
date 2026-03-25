@@ -25,8 +25,8 @@ const register = async (req, res) => {
 }
 
 const login = async (req, res) => {
-    const { email, password } = req.body
-    const userFoundFromEmail = await userModel.find({email : email})
+    const {email,password} = req.body
+    const userFoundFromEmail = await userModel.findOne({email : email})
     if(userFoundFromEmail){
         if(bcrypt.compareSync(password,userFoundFromEmail.password)){
             res.status(201).json({
@@ -46,7 +46,7 @@ const login = async (req, res) => {
 
 const getUserById = async (req, res) => {
     try {
-        const foundUser = await userModel.findById(req.body.id)
+        const foundUser = await userModel.findById(req.params.id)
         if (foundUser) {
             res.status(201).json({
                 message: "User Found!",

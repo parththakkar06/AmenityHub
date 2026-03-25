@@ -22,11 +22,11 @@ const amenityModel = new Schema({
     },
     Availibility: {
         openingTime: {
-            type: Date,
+            type: String,
             required: true
         },
         closingTime: {
-            type: Date,
+            type: String,
             required: true
         }
     },

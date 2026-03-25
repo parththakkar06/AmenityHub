@@ -38,4 +38,4 @@ const BookingModel = new Schema({
 })
 
 
-module.exports = mongoose.Schema('bookings',BookingModel)
+module.exports = mongoose.model('bookings',BookingModel)

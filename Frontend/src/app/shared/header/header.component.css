@@ -1,0 +1,164 @@
+/* 🔥 ROOT NAVBAR */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  height: 70px;
+  padding: 0 40px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #0b0b0c;
+
+  border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+}
+
+/* 🔥 LEFT */
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  background: linear-gradient(90deg, #c9a227, #f4d03f);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 🔥 CENTER */
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+/* 🔥 LINKS */
+.nav-link {
+  position: relative;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #a1a1aa;
+  text-decoration: none;
+
+  padding: 6px 0;
+
+  transition: color 0.25s ease;
+}
+
+/* hover */
+.nav-link:hover {
+  color: #ffffff;
+}
+
+/* active */
+.nav-link.active {
+  color: #f4d03f;
+}
+
+/* underline (clean, not flashy) */
+.nav-link.active::after {
+  content: "";
+  position: absolute;
+
+  bottom: -12px;
+  left: 0;
+
+  width: 100%;
+  height: 2px;
+
+  background: #f4d03f;
+  border-radius: 2px;
+}
+
+/* 🔥 RIGHT */
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* 🔥 USER BLOCK */
+.user-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+/* email */
+.name {
+  font-size: 13px;
+  color: #d4d4d8;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 🔥 AVATAR */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #c9a227, #f4d03f);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+}
+
+/* 🔥 BUTTON BASE */
+.btn {
+  font-size: 13px;
+  font-weight: 500;
+
+  padding: 6px 16px;
+  border-radius: 6px;
+
+  cursor: pointer;
+  border: none;
+
+  transition: all 0.2s ease;
+}
+
+/* 🔥 GHOST BUTTON */
+.btn.ghost {
+  background: transparent;
+  color: #a1a1aa;
+}
+
+.btn.ghost:hover {
+  color: #ffffff;
+}
+
+/* 🔥 PRIMARY BUTTON */
+.btn.primary {
+  background: linear-gradient(90deg, #c9a227, #f4d03f);
+  color: #0b0b0c;
+}
+
+.btn.primary:hover {
+  filter: brightness(1.05);
+}
+
+/* 🔥 MATERIAL MENU FIX */
+::ng-deep .mat-mdc-menu-panel {
+  background: #111113 !important;
+  border: 1px solid rgba(255, 215, 0, 0.1);
+  border-radius: 10px !important;
+}
+
+::ng-deep .mat-mdc-menu-item {
+  color: #e4e4e7 !important;
+}
+
+::ng-deep .mat-mdc-menu-item:hover {
+  background: rgba(255, 215, 0, 0.08) !important;
+}
