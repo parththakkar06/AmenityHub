@@ -1,11 +1,12 @@
 const mailer = require('nodemailer')
+const sgMail = require("@sendgrid/mail")
+
 
 const mailSend = async(to,subject,text) => {
     const transport = mailer.createTransport({
         service : "gmail",
         auth : {
             user : 'parththakkar1013@gmail.com',
-            pass : 'mqav mivn ynwb hxwd'
         }
     })
 
@@ -21,4 +22,4 @@ const mailSend = async(to,subject,text) => {
 }
 
 
-module.exports = mailSend
+module.exports = {mailSend,sendMail}

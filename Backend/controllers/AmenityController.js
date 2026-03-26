@@ -55,12 +55,12 @@ const updateAmenityById = async(req,res) => {
         const updatedUser = await amenityModel.findByIdAndUpdate(id,req.body,{new:true})
 
         res.status(201).json({
-            message : "User Updated Successfully",
+            message : "Amenity Updated Successfully",
             data : updatedUser
         })
     } catch (error) {
         res.json({
-            message : "Error while updateing user!",
+            message : "Error while updating Amenity!",
             error : error.message
         })
     }

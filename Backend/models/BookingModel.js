@@ -3,39 +3,48 @@ const Schema = mongoose.Schema
 
 
 const BookingModel = new Schema({
-    userId : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : true,
-        ref : 'users'
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'users'
     },
-    amenityId : {
-        type : mongoose.Schema.Types.ObjectId,
-        required : true,
-        ref : 'amenities'
+    amenityId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'amenities'
     },
-    date : {
-        type : Date,
-        required : true
+    date: {
+        type: Date,
+        required: true
     },
-    startTime : {
-        type : String,
-        required : true
+    startTime: {
+        type: Date,
+        required: true
     },
-    endTime : {
-        type : String,
-        required : true
+    endTime: {
+        type: Date,
+        required: true
     },
-    status : {
-        type : String,
-        enum : ['Pending','Accepted','Rejected'],
-        default : 'Pending'
+    status: {
+        type: String,
+        enum: ['Pending', 'Accepted', 'Rejected'],
+        default: 'Pending'
     },
-    rejectionReason : {
-        type : String
+    rejectionReason: {
+        type: String
     }
-},{
-    timestamps : true
+}, {
+    timestamps: true
 })
 
+BookingModel.pre('save', function (next) {
+    if (this.startTime >= this.endTime) {
+        return next(new Error('Start Time must be before the End Time'))
+    } else {
+        return next()
+    }
+})
 
-module.exports = mongoose.model('bookings',BookingModel)
+BookingModel.index({ amenityId: 1 }, { startTime: 1 }, { endTime: 1 })
+
+module.exports = mongoose.model('bookings', BookingModel)
