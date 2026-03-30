@@ -1,0 +1,103 @@
+body {
+  margin: 0;
+  height: 80vh;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.otp-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.otp-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 30px 25px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.otp-card h2 {
+  margin-bottom: 10px;
+  color: #1e293b;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
+/* OTP Input */
+.otp-input {
+  width: 90%;
+  padding: 14px;
+  font-size: 18px;
+  letter-spacing: 6px;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  transition: 0.25s;
+}
+
+/* Focus */
+.otp-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+/* Error */
+.error {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #ef4444;
+}
+
+/* Button */
+.verify-btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.verify-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(99,102,241,0.25);
+}
+
+.verify-btn:disabled {
+  background: #cbd5f5;
+  cursor: not-allowed;
+}
+
+/* Resend */
+.resend {
+  margin-top: 15px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.resend span {
+  color: #4f46e5;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.resend span:hover {
+  text-decoration: underline;
+}

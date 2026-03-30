@@ -27,11 +27,6 @@ const userModel = new Schema({
         ref: 'role',
         required: true
     },
-    isVerified: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
     // passUpdation: {
     //     updatedDate: {
     //         type: Date,

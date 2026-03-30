@@ -3,7 +3,7 @@ const amenityModel = require('../models/AmenityModel')
 const getAllAmenities = async (req, res) => {
     try {
         const amenities = await amenityModel.find()
-
+        
         res.json({
             message: "Amenities Found!",
             data: amenities
@@ -19,7 +19,6 @@ const getAllAmenities = async (req, res) => {
 const addAmenity = async (req, res) => {
     try {
         const savedAmenity = await amenityModel.create(req.body)
-
         res.status(201).json({
             message: "Amenity Saved!",
             data: savedAmenity

@@ -1,1 +1,43 @@
-<p>register works!</p>
+<!-- name , email , phone no. , password , address - (blockNo , flatNo) -->
+<body>
+<div class="mid">
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <h2>Register</h2>
+
+        <input type="text" formControlName="name" placeholder="Name" /><br>
+        <!-- <span *ngIf="name?.hasError('required')">Name is Required</span> -->
+        <span class="error" *ngIf="name?.invalid && (name?.dirty || name?.touched)">Please Enter User Name</span>
+        <br>
+        <input type="email" formControlName="email" placeholder="Email" /><br>
+        <!-- <span *ngIf="email?.hasError('required')">Email is Required</span> -->
+        <span class="error" *ngIf="email?.invalid && (email?.dirty || email?.touched)">Please Enter a valid Email</span>
+        <br>
+        <input type="password" formControlName="password" placeholder="Password" /><br>
+        <!-- <span *ngIf="password?.hasError('required')">Password is Required</span> -->
+        <span class="error" *ngIf="password?.invalid && (password?.dirty || password?.touched)">Please Enter a valid
+            Password</span>
+        <br>
+        <input type="number" formControlName="phone" placeholder="phone No." />
+        <br>
+        <!-- <span *ngIf="phone?.hasError('required')">Phone Number is Required</span> -->
+        <span class="error" *ngIf="phone?.invalid && (phone?.dirty || phone?.touched)">Please Enter a valid Phone
+            Number</span>
+        <br>
+ 
+        <input type="text" formControlName="block" placeholder="Block No." />
+        <br>
+        <!-- <span *ngIf="block?.hasError('required')">Block Number is Required</span> -->
+        <span class="error" *ngIf="block?.invalid && (block?.dirty || block?.touched)">Please Enter a valid Block
+            Number</span>
+        <br>
+        <input type="text" formControlName="flat" placeholder="Flat No." />
+        <br>
+        <!-- <span *ngIf="flat?.hasError('required')">Flat Number is Required</span> -->
+        <span class="error" *ngIf="flat?.invalid && (flat?.dirty || flat?.touched)">Please Enter a valid flat
+            Number</span>
+        <br>
+        <button class="btn" [disabled]="registerForm.invalid">Register</button>
+    </form>
+</div>
+</body>

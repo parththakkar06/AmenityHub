@@ -12,10 +12,10 @@
   <div class="nav-center">
 
     <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
-    <a class="nav-link" routerLink="/bookings" routerLinkActive="active">Bookings</a>
-
+    <a class="nav-link" routerLink="/mybookings" routerLinkActive="active">Bookings</a>
+<!-- 
+       *ngIf="user?.role === 'admin'" -->
     <a class="nav-link"
-       *ngIf="user?.role === 'admin'"
        routerLink="/admin/dashboard"
        routerLinkActive="active">
        Dashboard

@@ -1,0 +1,167 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Background */
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container */
+.mid {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px;
+}
+
+/* Form Card */
+form {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  padding: 30px 25px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+form h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Inputs */
+form input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+/* Input Focus */
+form input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Error Text */
+span {
+  font-size: 12px;
+  color: #ef4444;
+  display: block;
+  margin-top: 4px;
+}
+
+.error {
+  opacity: 0.8;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Button Hover */
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(99, 102, 241, 0.25);
+}
+
+/* Disabled Button */
+.btn:disabled {
+  background: #cbd5f5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Remove ugly spacing from <br> abuse */
+br {
+  display: none;
+}
+
+/* Role Group */
+.role-group {
+  margin-top: 15px;
+}
+
+.role-group > label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+}
+
+/* Radio Wrapper */
+.radio-wrapper {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+/* Hide default radio */
+.radio-option input {
+  display: none;
+}
+
+/* Custom Radio Style */
+.radio-option {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-size: 14px;
+  color: #475569;
+}
+
+/* Hover */
+.radio-option:hover {
+  border-color: #6366f1;
+}
+
+/* Checked State */
+.radio-option input:checked + span {
+  color: #4f46e5;
+  font-weight: 600;
+}
+
+/* Highlight selected box */
+.radio-option input:checked + span::before {
+  content: '';
+  position: absolute;
+}
+
+/* Better visual selection */
+.radio-option input:checked ~ span {
+  color: #4f46e5;
+}
+
+/* Active styling using :has (modern browsers) */
+.radio-option:has(input:checked) {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+}

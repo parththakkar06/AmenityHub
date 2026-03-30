@@ -34,12 +34,12 @@ const amenityModel = new Schema({
     }
 })
 
-amenityModel.pre('save', function (next) {
-    if (this.Availibility.openingTime >= this.Availibility.closingTime) {
-        return next(new Error('Opening time must be before Closing time'))
-    } else {
-        return next()
-    }
-})
+// amenityModel.pre('save', function(next) {
+//     if (this.availibility.openingTime >= this.availibility.closingTime) {
+//         new Error('Opening time must be before Closing time')
+//     } else {
+//     }
+//     next();
+// })
 
 module.exports = mongoose.model("amenities", amenityModel)

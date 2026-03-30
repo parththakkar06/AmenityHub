@@ -26,6 +26,7 @@ const verifyOTP = async (email, otp) => {
 
 const register = async (req, res) => {
     try {
+        console.log("here")
         const email = req.body.email
 
         const user = await userModel.findOne({ email: email })
@@ -87,14 +88,16 @@ const verify = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body
-    const userFoundFromEmail = await userModel.findOne({ email: email })
+    const userFoundFromEmail = await userModel.findOne({ email: email }).populate('roleId','role')
 
 
     if (userFoundFromEmail) {
         if (bcrypt.compareSync(password, userFoundFromEmail.password)) {
             sendOTP(email)
             res.status(201).json({
-                message: "Log In Successfull , verification otp sending..."
+                email : email,
+                role : userFoundFromEmail.roleId.role,
+                id : userFoundFromEmail._id
             })
         } else {
             res.status(401).json({

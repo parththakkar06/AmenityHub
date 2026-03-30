@@ -1,0 +1,30 @@
+<div class="amenities-container">
+  @for (a of amenityList; track a) {
+    <div class="amenity-card">
+
+      <div class="card-header">
+        <h3>{{ a.name }}</h3>
+        <span class="price">₹{{ a.pricePerHour }}/hr</span>
+      </div>
+
+      <p class="description">{{ a.description }}</p>
+
+      <div class="details">
+        <span><strong>Location:</strong> {{ a.location }}</span>
+        <span><strong>Capacity:</strong> {{ a.capacity }} People</span>
+        <span>
+          <strong>Hours:</strong>
+          {{ a.availibility.openingTime }} - {{ a.availibility.closingTime }}
+        </span>
+      </div>
+
+      <div class="rules">
+        <strong>Rules:</strong>
+        <p>{{ a.rules }}</p>
+      </div>
+
+      <button class="book-btn">Book Now</button>
+
+    </div>
+  }
+</div>

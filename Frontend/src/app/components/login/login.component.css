@@ -1,0 +1,89 @@
+/* Container stays same */
+.mid {
+  width: 100%;
+  max-width: 380px;
+  padding: 20px;
+}
+body {
+  height: 80vh;
+  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Form Card */
+form {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  padding: 28px 22px;
+  border-radius: 16px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* Title */
+form h2 {
+  text-align: center;
+  margin-bottom: 22px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Inputs */
+form input {
+  width: 90%;
+  padding: 12px 14px;
+  margin-top: 12px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.25s ease;
+}
+
+/* Focus */
+form input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* Error */
+.error {
+  font-size: 12px;
+  color: #ef4444;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: white;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(99, 102, 241, 0.25);
+}
+
+/* Disabled */
+.btn:disabled {
+  background: #cbd5f5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Remove <br> garbage spacing */
+br {
+  display: none;
+}
