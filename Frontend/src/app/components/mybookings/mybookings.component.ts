@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BookingService } from '../../services/booking.service';
+import { SaveuserService } from '../../services/saveuser.service';
 
 @Component({
   selector: 'app-mybookings',
@@ -10,10 +11,23 @@ import { BookingService } from '../../services/booking.service';
 })
 export class MybookingsComponent {
 
-  constructor(private route : Router , private bookingService : BookingService){}
+  constructor(private route : Router , private bookingService : BookingService , private saveUser : SaveuserService){}
 
+  mybookings : any = ''
   ngOnInit(){
-    // this.bookingService.getBookingById(id)
+    const user = this.saveUser.getUserFromStorage()
+    this.bookingService.getBookingById(user.id).subscribe({
+      next : (book) => {
+        this.mybookings = book
+      },
+      error : (err) => {
+        alert(err.error.message)
+      }
+    })
+  }
+
+  getbookings(){
+    console.log(this.mybookings)
   }
 
 }

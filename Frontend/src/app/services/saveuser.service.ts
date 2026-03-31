@@ -9,7 +9,7 @@ export class SaveuserService {
   constructor() { }
 
   private userSubject =  new BehaviorSubject<any>(this.getUserFromStorage())
-  users = this.userSubject.asObservable()
+  user$ = this.userSubject.asObservable()
 
   setUser(user : any){
     this.userSubject.next(user)

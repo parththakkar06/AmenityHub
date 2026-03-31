@@ -13,4 +13,5 @@ export class BookingService {
   getBookingById(id : string){
     return this.http.get("http://localhost:3000/booking/bookings"+"/"+id,{withCredentials : true})
   }
+
 }

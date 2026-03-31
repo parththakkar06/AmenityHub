@@ -133,10 +133,28 @@ const updateBookings = async (req, res) => {
     }
 }
 
+const getBookingsByUserId = async(req,res) => {
+    try {
+        const id = req.params.id
+        const bookings = await bookingModel.findById(id)
+
+        res.status(201).json({
+            message : "bookings Found!",
+            data : bookings
+        })
+    } catch (error) {
+        res.json({
+            message : "Error while finding booking for user",
+            error : error.message
+        })
+    }
+}
+
 module.exports = {
     getAllBookings,
     addBookings,
     updateBookings,
     getAllAcceptedBookings,
-    getAllPendingBookings
+    getAllPendingBookings,
+    getBookingsByUserId
 }

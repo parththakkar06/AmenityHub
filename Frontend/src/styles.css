@@ -2,3 +2,146 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.toast-container {
+  padding: 12px;
+}
+
+/* Base toast */
+.toast {
+  border-radius: 16px !important;
+  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.65) !important;
+  color: #111 !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 14px 16px !important;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Title */
+.toast-title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Message */
+.toast-message {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* Remove ugly default icons background */
+.toast-success,
+.toast-error,
+.toast-info,
+.toast-warning {
+  background-image: none !important;
+}
+
+/* Accent borders */
+.toast-success {
+  border-left: 4px solid #22c55e;
+}
+
+.toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.toast-info {
+  border-left: 4px solid #3b82f6;
+}
+
+.toast-warning {
+  border-left: 4px solid #f59e0b;
+}
+
+/* Hover effect */
+.toast:hover {
+  transform: translateY(-2px);
+  transition: 0.2s ease;
+}
+
+/* Progress bar */
+.toast-progress {
+  height: 3px;
+  opacity: 0.7;
+}
+
+.toast {
+  animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Layout */
+.toast-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Icon base */
+.toast-icon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Colors */
+.toast-icon.success {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.toast-icon.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.toast-icon.info {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.toast-icon.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+/* Text */
+.toast-text {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+
+.toast-flex {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* Color mapping */
+.toast-svg.success { color: #22c55e; }
+.toast-svg.error { color: #ef4444; }
+.toast-svg.info { color: #3b82f6; }
+.toast-svg.warning { color: #f59e0b; }

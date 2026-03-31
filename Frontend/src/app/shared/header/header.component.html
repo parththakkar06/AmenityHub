@@ -9,36 +9,35 @@
   </div>
 
   <!-- Center -->
-  <div class="nav-center">
+   @if(user){
+  <div class="nav-center" >
 
     <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
     <a class="nav-link" routerLink="/mybookings" routerLinkActive="active">Bookings</a>
-<!-- 
-       *ngIf="user?.role === 'admin'" -->
-    <a class="nav-link"
-       routerLink="/admin/dashboard"
-       routerLinkActive="active">
-       Dashboard
+    <!-- 
+        -->
+    <a class="nav-link"  routerLink="/admin/dashboard" routerLinkActive="active">
+      Dashboard
     </a>
 
     <!-- Moving indicator -->
     <div class="nav-indicator"></div>
 
   </div>
-
+}
   <!-- Right -->
   <div class="nav-right">
 
-    <ng-container >
+    <ng-container *ngIf="user; else guest">
 
       <div class="profile" [matMenuTriggerFor]="menu">
         <div class="avatar"></div>
       </div>
 
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Someone.com</button>
+        <button mat-menu-item>{{user?.email}}</button>
         <button mat-menu-item routerLink="/profile">Profile</button>
-        <button mat-menu-item >Logout</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
       </mat-menu>
 
     </ng-container>

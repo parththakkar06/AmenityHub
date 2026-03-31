@@ -4,6 +4,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { HomeComponent } from './components/home/home.component';
 import { MybookingsComponent } from './components/mybookings/mybookings.component';
+import { BookAmenityComponent } from './components/book-amenity/book-amenity.component';
 
 export const routes: Routes = [
     {
@@ -25,5 +26,9 @@ export const routes: Routes = [
     {
         path : 'mybookings',
         component : MybookingsComponent
+    },
+    {
+        path : 'book-amenity',
+        component : BookAmenityComponent
     }
 ];

@@ -1,0 +1,50 @@
+<body>    
+<div class="booking-container">
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+
+    <h2>Book Amenity</h2>
+
+    <div class="form-group">
+      <label>Amenity Name</label>
+      <!-- <textarea value="{{}}"></textarea> -->
+      <input type="text" disabled value={{amenityName.name}}/>
+    </div>
+
+
+    <!-- Date -->
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" formControlName="date" />
+      <small *ngIf="date?.touched && date?.invalid">
+        Date is required
+      </small>
+    </div>
+
+    <!-- Time Row -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Start Time</label>
+        <input type="time" formControlName="startTime" />
+        <small *ngIf="startTime?.touched && startTime?.invalid">
+          Required
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label>End Time</label>
+        <input type="time" formControlName="endTime" />
+        <small *ngIf="endTime?.touched && endTime?.invalid">
+          Required
+        </small>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button type="submit" [disabled]="bookingForm.invalid">
+      Confirm Booking
+    </button>
+
+  </form>
+</div>
+</body>
+    

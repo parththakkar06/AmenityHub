@@ -69,9 +69,15 @@ const verify = async (req, res) => {
             process.env.SECRET_KEY,
             {expiresIn : '1d'}
         )
+
+        res.cookie("token",token , {
+            httpOnly : true,
+            sameSite : "Lax",
+            secure: false
+        })
         res.status(200).json({
             message: "OTP Verified. Logging IN.",
-            token,
+            token : `Bearer ${token}`,
             user : {
                 id : user._id,
                 name : user.name,
@@ -149,11 +155,19 @@ const getAllUsers = async (req, res) => {
 }
 
 
+const logout = (req,res) => {
+    res.clearCookie("token")
+    res.json({
+        message : "Logged Out Successfully!"
+    })
+}
+
 
 module.exports = {
     register,
     getAllUsers,
     getUserById,
     login,
-    verify
+    verify,
+    logout
 }

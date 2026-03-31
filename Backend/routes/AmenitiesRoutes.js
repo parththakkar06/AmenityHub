@@ -1,10 +1,11 @@
 const express = require('express')
 const routes = express.Router()
 const amenityController = require('../controllers/AmenityController')
+const authMiddleware = require('../middlewares/authMiddleware')
 
-routes.get("/amenities",amenityController.getAllAmenities)
-routes.post("/amenities",amenityController.addAmenity)
-routes.delete("/amenities/:id",amenityController.deleteAmenityById)
-routes.put("/amenities/:id",amenityController.updateAmenityById)
+routes.get("/amenities",authMiddleware,amenityController.getAllAmenities)
+routes.post("/amenities",authMiddleware,amenityController.addAmenity)
+routes.delete("/amenities/:id",authMiddleware,amenityController.deleteAmenityById)
+routes.put("/amenities/:id",authMiddleware,amenityController.updateAmenityById)
 
 module.exports = routes

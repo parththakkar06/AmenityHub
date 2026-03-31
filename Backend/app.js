@@ -3,6 +3,7 @@ const express = require("express")
 const { default: mongoose } = require("mongoose")
 const app = express()
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 const corsOptions = {
     origin : 'http://localhost:4200',
@@ -12,7 +13,7 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
-
+app.use(cookieParser())
 app.use(express.json())
 
 
