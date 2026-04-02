@@ -23,7 +23,7 @@ export class HomeComponent {
     console.log(this.amenityList[0])
   }
 
-  bookNow(name : string){
-    this.route.navigate(['/book-amenity'],{state : {name}})
+  bookNow(name : string, pricePerHour : number){
+    this.route.navigate(['/book-amenity'],{state : {name,pricePerHour}})
   }
 }

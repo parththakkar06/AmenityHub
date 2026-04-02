@@ -51,18 +51,24 @@ const getAllPendingBookings = async (req, res) => {
 
 const addBookings = async (req, res) => {
     try {
-        const {startTime , endTime} = req.body
+        console.log("here")
+        const {startTime , endTime , date} = req.body
+        console.log(req.body)
         const selectedAmenity = await AmenityModel.findOne({ name: req.body.amenityName })
         const amenityId = selectedAmenity._id
-
+        console.log("Found amenity id.... ",amenityId)
         if(!startTime || !endTime || !amenityId){
             res.status(400).json({
                 message : "Missing required Fields"
             })
         }
 
-        const start = new Date(startTime)
-        const end = new Date(endTime)
+        const combinedstart = `${date}T${startTime}`
+        const start = new Date(combinedstart)
+        const combinedend = `${date}T${endTime}`
+        const end = new Date(combinedend)
+        console.log("date start..",start)
+        console.log("date end..",end)
 
         if(start >= end){
             res.status(400).json({
@@ -90,30 +96,40 @@ const addBookings = async (req, res) => {
                 { endTime : {$gte : start} }
             ]
         })
-
-        if(overlapping){
+        console.log("overlapping .... ",overlapping)
+        if(overlapping.length > 0){
             res.status(400).json({
                 message : "Already Booked Time Slot."
             })
-        }
-
-        const booking = await bookingModel.create({ ...req.body,
+        }else{
+        console.log("amenityid..",amenityId)
+        console.log("userId...",req.params.id)
+        console.log("startTime ... ",start)
+        console.log("endTime ... ",end)
+        const date1 = new Date(date)
+        console.log("date",date1)
+        
+        const booking = await bookingModel.create({ 
             amenityId : amenityId,
-            userId : req.user.id,
+            userId : req.params.id,
             startTime : start,
-            endTime : end
+            endTime : end,
+            date : date1,
+            status : 'Pending'
         })
-
+        
         res.status(201).json({
             message: "Booking done successfully!",
             data: booking
         })
+    }
     } catch (error) {
         res.json({
             message: "Error while booking",
             error: error.message
         })
     }
+    
 }
 
 const updateBookings = async (req, res) => {
@@ -136,8 +152,9 @@ const updateBookings = async (req, res) => {
 const getBookingsByUserId = async(req,res) => {
     try {
         const id = req.params.id
-        const bookings = await bookingModel.findById(id)
-
+        // console.log(id)
+        const bookings = await bookingModel.find({userId : id}).populate('amenityId','name')
+        // console.log(bookings)
         res.status(201).json({
             message : "bookings Found!",
             data : bookings

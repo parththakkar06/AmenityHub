@@ -7,10 +7,11 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule, NgIf } from '@angular/common';
 import { SaveuserService } from '../../services/saveuser.service';
 import { Subscription } from 'rxjs';
+import { ChangePasswordComponent } from '../../components/change-password/change-password.component';
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule , MatToolbarModule , MatButtonModule,MatMenuModule,MatIconModule , RouterLink , RouterLinkActive , NgIf],
+  imports: [ChangePasswordComponent,CommonModule , MatToolbarModule , MatButtonModule,MatMenuModule,MatIconModule , RouterLink , RouterLinkActive , NgIf],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })

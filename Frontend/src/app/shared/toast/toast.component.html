@@ -1,0 +1,37 @@
+<div class="toast-container">
+  <div *ngFor="let toast of toasts; trackBy : trackById" class="toast" [ngClass]="toast.type">
+
+    <div class="icon">
+      <ng-container [ngSwitch]="toast.type">
+        <svg *ngSwitchCase="'success'" viewBox="0 0 24 24">
+          <path d="M20 6L9 17l-5-5" />
+        </svg>
+
+        <svg *ngSwitchCase="'error'" viewBox="0 0 24 24">
+          <path d="M6 6l12 12M6 18L18 6" />
+        </svg>
+
+        <svg *ngSwitchCase="'info'" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+        </svg>
+
+        <svg *ngSwitchCase="'warning'" viewBox="0 0 24 24">
+          <path d="M12 3L2 21h20L12 3z"/>
+        </svg>
+      </ng-container>
+    </div>
+
+    <div class="message">
+      {{ toast.message }}
+    </div>
+
+    <button class="close" (click)="remove(toast.id)">×</button>
+
+    <!-- 🔥 Progress bar -->
+    <div 
+      class="progress-bar"
+      [style.animationDuration.ms]="toast.duration">
+    </div>
+
+  </div>
+</div>

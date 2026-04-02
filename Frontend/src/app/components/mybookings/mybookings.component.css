@@ -1,0 +1,74 @@
+.booking-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.booking-container h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Card */
+.booking-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px;
+  margin-bottom: 14px;
+
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+
+  transition: 0.2s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Info */
+.booking-info {
+  display: flex;
+  gap: 40px;
+}
+
+.booking-info label {
+  font-size: 12px;
+  color: #666;
+}
+
+.booking-info p {
+  margin: 4px 0 0;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Status badge */
+.status {
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Status colors */
+.status.pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.status.accepted {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.status.rejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}   

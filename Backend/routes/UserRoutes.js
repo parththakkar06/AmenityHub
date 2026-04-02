@@ -9,6 +9,6 @@ routes.post("/login",userController.login)
 routes.get("/users/:id",authMiddleware,userController.getUserById)
 routes.post("/verify-otp",userController.verify)
 routes.post("/logout",userController.logout)
-
+routes.put("/changepassword/:id",userController.changepassword)
 
 module.exports = routes

@@ -5,6 +5,7 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { HomeComponent } from './components/home/home.component';
 import { MybookingsComponent } from './components/mybookings/mybookings.component';
 import { BookAmenityComponent } from './components/book-amenity/book-amenity.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 export const routes: Routes = [
     {
@@ -30,5 +31,9 @@ export const routes: Routes = [
     {
         path : 'book-amenity',
         component : BookAmenityComponent
+    },
+    {
+        path : 'change-password',
+        component : ChangePasswordComponent
     }
 ];

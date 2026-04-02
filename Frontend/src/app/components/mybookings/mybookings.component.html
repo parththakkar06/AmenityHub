@@ -1,1 +1,35 @@
-<button (click) = "getbookings()">SHOW</button>
+<div class="booking-container">
+
+    <h2>Your Bookings</h2>
+    @for(booking of bookings; track booking){
+    <div class="booking-card">
+
+        <div class="booking-info">
+            <div>
+                <label>Amenity</label>
+                <p>{{booking.amenityId.name}}</p>
+            </div>
+            <div>
+                <label>Date</label>
+                <p>{{ booking.date | date:'mediumDate' }}</p>
+            </div>
+
+            <div>
+                <label>Start Time</label>
+                <p>{{ booking.startTime | date:'shortTime' }}</p>
+            </div>
+
+            <div>
+                <label>End Time</label>
+                <p>{{ booking.endTime | date:'shortTime' }}</p>
+            </div>
+        </div>
+
+        <div class="status" [ngClass]="booking.status.toLowerCase()">
+            {{ booking.status }}
+        </div>
+
+    </div>
+    }
+
+</div>

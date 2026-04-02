@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { SaveuserService } from '../../services/saveuser.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-verify',
@@ -16,7 +17,7 @@ export class VerifyComponent {
   public mail: any = ''
   data: any;
   user : any = ''
-  constructor(private userService: UserService, private router: Router, private saveUser : SaveuserService) {
+  constructor(private toast : ToastService,private userService: UserService, private router: Router, private saveUser : SaveuserService) {
     const nav = this.router.getCurrentNavigation()
     const user : any = nav?.extras?.state
     console.log(user)
@@ -43,11 +44,12 @@ export class VerifyComponent {
     console.log('this is data',this.data)
     this.userService.verify(this.data).subscribe({
       next: () => {
+        this.toast.show('Login Successfull','success')
         this.saveUser.setUser(this.user)
         this.router.navigate(['/home'])
       },
       error: (err) => {
-        console.error(err)
+        this.toast.show(err.error.message,'error')
       }
     })
   }

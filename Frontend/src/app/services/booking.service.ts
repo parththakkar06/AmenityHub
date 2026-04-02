@@ -14,4 +14,8 @@ export class BookingService {
     return this.http.get("http://localhost:3000/booking/bookings"+"/"+id,{withCredentials : true})
   }
 
+  bookAmenity(id : string, credentials : object):Observable<any>{
+    return this.http.post<any>("http://localhost:3000/booking/bookings"+"/"+id,credentials,{withCredentials : true})
+  }
+
 }

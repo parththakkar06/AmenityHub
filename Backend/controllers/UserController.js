@@ -59,7 +59,7 @@ const verify = async (req, res) => {
 
     const isValid = await verifyOTP(email, otp)
 
-    if (isValid) {
+    if (isValid.valid == true) {
         const user = await userModel.findOne({ email: email }).populate('roleId')
         const token = jwt.sign(
             {
@@ -67,22 +67,22 @@ const verify = async (req, res) => {
                 role: user.roleId.name
             },
             process.env.SECRET_KEY,
-            {expiresIn : '1d'}
+            { expiresIn: '1d' }
         )
 
-        res.cookie("token",token , {
-            httpOnly : true,
-            sameSite : "Lax",
+        res.cookie("token", token, {
+            httpOnly: true,
+            sameSite: "Lax",
             secure: false
         })
         res.status(200).json({
             message: "OTP Verified. Logging IN.",
-            token : `Bearer ${token}`,
-            user : {
-                id : user._id,
-                name : user.name,
-                email : user.email,
-                role :  user.roleId.role
+            token: `Bearer ${token}`,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.roleId.role
             }
         })
     } else {
@@ -94,16 +94,16 @@ const verify = async (req, res) => {
 
 const login = async (req, res) => {
     const { email, password } = req.body
-    const userFoundFromEmail = await userModel.findOne({ email: email }).populate('roleId','role')
+    const userFoundFromEmail = await userModel.findOne({ email: email }).populate('roleId', 'role')
 
 
     if (userFoundFromEmail) {
         if (bcrypt.compareSync(password, userFoundFromEmail.password)) {
             sendOTP(email)
             res.status(201).json({
-                email : email,
-                role : userFoundFromEmail.roleId.role,
-                id : userFoundFromEmail._id
+                email: email,
+                role: userFoundFromEmail.roleId.role,
+                id: userFoundFromEmail._id
             })
         } else {
             res.status(401).json({
@@ -155,13 +155,52 @@ const getAllUsers = async (req, res) => {
 }
 
 
-const logout = (req,res) => {
+const logout = (req, res) => {
     res.clearCookie("token")
     res.json({
-        message : "Logged Out Successfully!"
+        message: "Logged Out Successfully!"
     })
 }
 
+const changepassword = async (req, res) => {
+    try {
+        console.log("here")
+        const id = req.params.id
+        const user = await userModel.findById(id)
+        const { oldPass, newPass, confirmNewPass } = req.body
+
+        if (!user) {
+            res.status(400).json({
+                message: "No User Found"
+            })
+        }
+        if (bcrypt.compareSync(oldPass, user.password)) {
+            if (newPass !== confirmNewPass) {
+                res.status(400).json({
+                    message: "Confirm Pass and New Pass doesn't match"
+                })
+            } else {
+                hashedPassword = await bcrypt.hash(newPass, 10)
+                const data = { password: hashedPassword }
+                const updatedUser = await userModel.findByIdAndUpdate(id, data, { new: true })
+                res.status(200).json({
+                    message: "Password Changed",
+                    data : updatedUser
+                })
+            }
+        }else{
+            res.status(400).json({
+                message : "Incorrect Password!"
+            })
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(400).json({
+            message : "Something went wrong!",
+            error : error.message
+        })
+    }
+}
 
 module.exports = {
     register,
@@ -169,5 +208,6 @@ module.exports = {
     getUserById,
     login,
     verify,
-    logout
+    logout,
+    changepassword
 }

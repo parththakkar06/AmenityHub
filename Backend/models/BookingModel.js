@@ -37,13 +37,13 @@ const BookingModel = new Schema({
     timestamps: true
 })
 
-BookingModel.pre('save', function (next) {
-    if (this.startTime >= this.endTime) {
-        return next(new Error('Start Time must be before the End Time'))
-    } else {
-        return next()
-    }
-})
+// BookingModel.pre('save', function (next) {
+//     if (this.startTime >= this.endTime) {
+//          next(new Error('Start Time must be before the End Time'))
+//     } else {
+//         next()
+//     }
+// })
 
 BookingModel.index({ amenityId: 1 }, { startTime: 1 }, { endTime: 1 })
 

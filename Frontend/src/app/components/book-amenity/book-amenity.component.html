@@ -1,6 +1,6 @@
 <body>    
 <div class="booking-container">
-  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="booking-form">
+  <form [formGroup]="bookingForm" (ngSubmit)="beforeSubmit()" class="booking-form">
 
     <h2>Book Amenity</h2>
 
@@ -46,5 +46,20 @@
 
   </form>
 </div>
+
 </body>
-    
+
+<div class="overlay" *ngIf="showConfirm">
+  <div class="confirm-box">
+
+    <h3>{{ title }}</h3>
+    <p>{{ time }}</p>
+    <p>{{ amount }}</p>
+
+    <div class="actions">
+      <button class="cancel" (click)="onCancel()">Cancel</button>
+      <button class="confirm" (click)="onConfirm()">Confirm</button>
+    </div>
+
+  </div>
+</div>
