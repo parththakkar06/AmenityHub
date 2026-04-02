@@ -25,6 +25,10 @@ const BookingModel = new Schema({
         type: Date,
         required: true
     },
+    bookingAmount: {
+        type: Number,
+        required: true
+    },
     status: {
         type: String,
         enum: ['Pending', 'Accepted', 'Rejected'],

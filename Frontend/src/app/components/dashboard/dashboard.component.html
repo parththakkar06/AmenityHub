@@ -1,0 +1,70 @@
+<div class="dashboard-container">
+
+  <h1 class="dashboard-title">Admin Dashboard</h1>
+
+  <div class="dashboard-grid">
+
+    <div class="card">
+      <div class="card-content">
+        <h3>Amenities</h3>
+        <p class="card-value">{{ amenityCount }}</p>
+        <p class="card-desc">Manage all facilities</p>
+      </div>
+      <button class="card-btn" [routerLink]="'/dashboard/view-amenities'">View Amenities</button>
+    </div>
+
+    <div class="card highlight">
+      <div class="card-content">
+        <h3>Add Amenity</h3>
+        <p class="card-desc">Create new facility</p>
+      </div>
+      <button class="card-btn primary">+ Add Amenity</button>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <h3>Bookings</h3>
+        <p class="card-value">{{ bookingCount }}</p>
+        <p class="card-desc">Track all reservations</p>
+      </div>
+      <button class="card-btn" [routerLink]="'/dashboard/bookings'">View Bookings</button>
+    </div>
+
+    <div class="card revenue">
+      <div class="card-content">
+        <h3>Revenue</h3>
+        <p class="card-value">₹{{revenue}}</p>
+        <span class="growth">Earning overview</span>
+      </div>
+      <button class="card-btn">View Revenue (per Amenitiy)</button>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <h3>Booking Trends</h3>
+        <p class="card-desc">Month Wise booking trends</p>
+      </div>
+      <button class="card-btn">View Booking Trends</button>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <h3>Amenity Utilization Summary</h3>
+        <p class="card-desc">Overall Utilization of Amenities</p>
+      </div>
+      <button class="card-btn">View Summary</button>
+    </div>
+
+
+    <div class="card">
+      <div class="card-content">
+        <h3>Users</h3>
+        <p class="card-desc">See all registered users</p>
+      </div>
+      <button class="card-btn" [routerLink]="'/dashboard/registered-users'">View Users</button>
+    </div>
+
+  </div>
+
+</div>
+

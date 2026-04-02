@@ -46,7 +46,11 @@ export class VerifyComponent {
       next: () => {
         this.toast.show('Login Successfull','success')
         this.saveUser.setUser(this.user)
-        this.router.navigate(['/home'])
+        if(this.user.role === "ADMIN"){
+          this.router.navigate(['/dashboard'])
+        }else{
+          this.router.navigate(['/home'])
+        }
       },
       error: (err) => {
         this.toast.show(err.error.message,'error')

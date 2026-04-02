@@ -13,4 +13,8 @@ export class AmenitiesService {
   getAmenities():Observable<any>{
     return this.http.get<any>('http://localhost:3000/amenity/amenities',{withCredentials : true})
   }
+
+  getAmenityCount(){
+    return this.http.get('http://localhost:3000/amenity/getamenitycount',{withCredentials : true})
+  }
 }

@@ -1,0 +1,33 @@
+<div class="page-container">
+
+  <div class="page-header">
+    <h2>All Amenities</h2>
+    <button class="add-btn">+ Add Amenity</button>
+  </div>
+
+  <div class="amenities-grid">
+
+    @for (amenity of amenities; track amenity) {
+      <div class="amenity-card">
+
+        <div class="amenity-info">
+          <h3>{{ amenity.name }}</h3>
+          <p class="desc">{{ amenity.description }}</p>
+          <p class="desc">Open Hours : {{(amenity.availibility.openingTime)/60}}:00 - {{(amenity.availibility.closingTime)/60}}:00</p>
+        </div>
+
+        <div class="amenity-meta">
+          <span>₹{{ amenity.pricePerHour }}</span>
+        </div>
+
+        <div class="actions">
+          <button class="edit-btn">Edit</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+
+      </div>
+    }
+
+  </div>
+
+</div>

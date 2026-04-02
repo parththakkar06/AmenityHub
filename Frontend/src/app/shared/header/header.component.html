@@ -12,11 +12,11 @@
    @if(user){
   <div class="nav-center" >
 
-    <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
-    <a class="nav-link" routerLink="/mybookings" routerLinkActive="active">Bookings</a>
+    <a class="nav-link" *ngIf="user?.role === 'USER'" routerLink="/home" routerLinkActive="active">Home</a>
+    <a class="nav-link" routerLink="/mybookings" *ngIf="user?.role === 'USER'"   routerLinkActive="active">Bookings</a>
     <!-- 
         -->
-    <a class="nav-link"  routerLink="/admin/dashboard" routerLinkActive="active">
+    <a class="nav-link" *ngIf="user?.role === 'ADMIN'" routerLink="/dashboard" routerLinkActive="active">
       Dashboard
     </a>
 

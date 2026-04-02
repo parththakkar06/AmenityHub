@@ -29,7 +29,7 @@ export class BookAmenityComponent {
   }
 
   bookingForm = new FormGroup({
-    date: new FormControl('2025-04-03', [Validators.required]),
+    date: new FormControl('2026-04-03', [Validators.required]),
     startTime: new FormControl('13:25', [Validators.required]),
     endTime: new FormControl('14:25', [Validators.required])
   })
@@ -83,7 +83,7 @@ export class BookAmenityComponent {
     let bookingtime = (end.getTime() - start.getTime()) / 60000
     let hours
     let mins
-    let amount
+    let amount : any
     this.priceph = this.amenityName.pricePerHour
     if (bookingtime > 59) {
       hours = Math.floor(bookingtime / 60)
@@ -101,16 +101,16 @@ export class BookAmenityComponent {
       `Total Amount : ${amount}`
       ,
       () => {
-        this.onSubmit()
+        this.onSubmit(amount)
       }
     );
 
   }
 
-  onSubmit() {
+  onSubmit(amount : any) {
     console.log(this.bookingForm.value)
     // console.log(this.user.id)
-    this.data = { ...this.bookingForm.value, amenityName: this.amenityName.name }
+    this.data = { ...this.bookingForm.value, amenityName: this.amenityName, bookingAmount : amount }
     this.book.bookAmenity(this.user.id, this.data).subscribe({
       next: () => {
         this.toast.show('Booking Successfull', 'success')

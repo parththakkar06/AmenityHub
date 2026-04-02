@@ -18,4 +18,19 @@ export class BookingService {
     return this.http.post<any>("http://localhost:3000/booking/bookings"+"/"+id,credentials,{withCredentials : true})
   }
 
+  getPastBookingById(id : string){
+    return this.http.get("http://localhost:3000/booking/pastbookings"+"/"+id,{withCredentials : true})
+  }
+
+  getBookingsCount(){
+    return this.http.get('http://localhost:3000/booking/getbookingscount',{withCredentials:true})
+  }
+
+  getRevenue(){
+    return this.http.get('http://localhost:3000/booking/getrevenue',{withCredentials : true})
+  }
+
+  getAllBookings(){
+    return this.http.get('http://localhost:3000/booking/bookings',{withCredentials : true})
+  }
 }

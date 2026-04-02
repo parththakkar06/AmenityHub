@@ -65,9 +65,25 @@ const updateAmenityById = async(req,res) => {
     }
 }
 
+const getAmenityCount = async(req,res) => {
+    try {
+        const count = await amenityModel.countDocuments()
+        res.status(200).json({
+            message : "Total Amenity Count Found!",
+            count : count
+        })
+    } catch (error) {
+        res.status(500).json({
+            message : "Something went wrong!",
+            error : error.message
+        })
+    }
+}
+
 module.exports = {
     getAllAmenities,
     addAmenity,
     deleteAmenityById,
-    updateAmenityById
+    updateAmenityById,
+    getAmenityCount
 }

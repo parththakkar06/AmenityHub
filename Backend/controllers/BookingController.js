@@ -1,9 +1,11 @@
 const AmenityModel = require('../models/AmenityModel')
 const bookingModel = require('../models/BookingModel')
+const userModel = require('../models/UserModel')
+
 
 const getAllBookings = async (req, res) => {
     try {
-        const bookings = await bookingModel.find().populate('userId','name email').populate('amenityId','name')
+        const bookings = await bookingModel.find().populate('amenityId','name').populate('userId','name')
 
         res.status(201).json({
             message: "All bookings fetched successfully",
@@ -52,16 +54,12 @@ const getAllPendingBookings = async (req, res) => {
 const addBookings = async (req, res) => {
     try {
         console.log("here")
-        const {startTime , endTime , date} = req.body
+        const {startTime , endTime , bookingAmount , date} = req.body
         console.log(req.body)
-        const selectedAmenity = await AmenityModel.findOne({ name: req.body.amenityName })
+        const selectedAmenity = await AmenityModel.findOne({ name: req.body.amenityName.name })
         const amenityId = selectedAmenity._id
         console.log("Found amenity id.... ",amenityId)
-        if(!startTime || !endTime || !amenityId){
-            res.status(400).json({
-                message : "Missing required Fields"
-            })
-        }
+        
 
         const combinedstart = `${date}T${startTime}`
         const start = new Date(combinedstart)
@@ -69,12 +67,8 @@ const addBookings = async (req, res) => {
         const end = new Date(combinedend)
         console.log("date start..",start)
         console.log("date end..",end)
-
-        if(start >= end){
-            res.status(400).json({
-                message : "Invalid Time Range"
-            })
-        }
+        const today = new Date()
+        
 
         const openingTime = selectedAmenity.availibility.openingTime 
         const closingTime = selectedAmenity.availibility.closingTime 
@@ -82,11 +76,7 @@ const addBookings = async (req, res) => {
         const check_s = start.getHours() * 60 + start.getMinutes() 
         const check_e = end.getHours() * 60 + end.getMinutes()
 
-        if(check_s < openingTime || check_e > closingTime){
-            res.status(400).json({
-                message : `Can not book before the opening timings of the ${selectedAmenity.name}`
-            })
-        }
+        
 
         const overlapping = await bookingModel.find({
             amenityId : amenityId,
@@ -97,11 +87,31 @@ const addBookings = async (req, res) => {
             ]
         })
         console.log("overlapping .... ",overlapping)
-        if(overlapping.length > 0){
+
+        if(!startTime || !endTime || !amenityId){
+            console.log("PROBLEM FOUND")
+            res.status(400).json({
+                message : "Missing required Fields"
+            })
+        }else if(start >= end){
+            res.status(400).json({
+                message : "Invalid Time Range"
+            })
+        }else if(start < today){
+            res.status(400).json({
+                message : "Check the booking again!"
+            })
+        }else if(check_s < openingTime || check_e > closingTime){
+            res.status(400).json({
+                message : `Can not book before the opening timings of the ${selectedAmenity.name}`
+            })
+        }else if(overlapping.length > 0){
             res.status(400).json({
                 message : "Already Booked Time Slot."
             })
         }else{
+
+
         console.log("amenityid..",amenityId)
         console.log("userId...",req.params.id)
         console.log("startTime ... ",start)
@@ -115,6 +125,7 @@ const addBookings = async (req, res) => {
             startTime : start,
             endTime : end,
             date : date1,
+            bookingAmount : bookingAmount,
             status : 'Pending'
         })
         
@@ -122,7 +133,9 @@ const addBookings = async (req, res) => {
             message: "Booking done successfully!",
             data: booking
         })
+
     }
+    
     } catch (error) {
         res.json({
             message: "Error while booking",
@@ -151,10 +164,20 @@ const updateBookings = async (req, res) => {
 
 const getBookingsByUserId = async(req,res) => {
     try {
+        const today = new Date()
         const id = req.params.id
         // console.log(id)
-        const bookings = await bookingModel.find({userId : id}).populate('amenityId','name')
+        // console.log(today)
+        const bookings = await bookingModel.find({userId : id,endTime : {$gte : today}}).populate('amenityId','name').sort({date:1,startTime:1})
         // console.log(bookings)
+        // let newBookings = []
+        // for(b of bookings){
+        //     console.log(b.endTime)
+        //    if(b.endTime <= today){
+        //      newBookings.push(b)
+        //    } 
+        // }
+        // console.log(newBookings)
         res.status(201).json({
             message : "bookings Found!",
             data : bookings
@@ -167,11 +190,63 @@ const getBookingsByUserId = async(req,res) => {
     }
 }
 
+const getPastBookingsByUserId = async(req,res) => {
+    try {
+    const id = req.params.id
+    const today = new Date()
+    const bookings = await bookingModel.find({userId : id , startTime : {$lt : today}}).populate('amenityId','name')
+    
+    if(bookings){
+        res.status(200).json({
+            message : "Past Bookings Found",
+            data : bookings
+        })
+    }
+
+    } catch (error) {
+        res.status(400).json({
+            message : "Something went wrong!",
+            error : error.message
+        })
+    }
+}
+
+const getBookingsCount = async(req,res) => {
+    try {
+        const count = await bookingModel.countDocuments()
+        res.status(200).json({count})
+    } catch (error) {
+        res.status(500).json({
+            message : "Something went wrong!"
+        })
+    }
+}
+
+const getRevenue = async(req,res) => {
+    try {
+        let Revenue = 0
+        const booking = await bookingModel.find()
+        for(b of booking){
+            console.log(b.bookingAmount)
+            Revenue += b.bookingAmount
+        }
+        console.log(Revenue)
+        res.status(200).json({Revenue})
+    } catch (error) {
+        res.status(500).json({
+            message : "Something went wrong!"
+        })
+    }
+}
+
 module.exports = {
+    getRevenue,
     getAllBookings,
     addBookings,
     updateBookings,
     getAllAcceptedBookings,
     getAllPendingBookings,
-    getBookingsByUserId
+    getBookingsByUserId,
+    getPastBookingsByUserId,
+    getBookingsCount
 }

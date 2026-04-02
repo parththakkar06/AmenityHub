@@ -1,35 +1,76 @@
 <div class="booking-container">
 
-    <h2>Your Bookings</h2>
-    @for(booking of bookings; track booking){
+  <h2 class="heading">Bookings</h2>
+
+  @for (booking of bookings; track booking) {
     <div class="booking-card">
 
-        <div class="booking-info">
-            <div>
-                <label>Amenity</label>
-                <p>{{booking.amenityId.name}}</p>
-            </div>
-            <div>
-                <label>Date</label>
-                <p>{{ booking.date | date:'mediumDate' }}</p>
-            </div>
-
-            <div>
-                <label>Start Time</label>
-                <p>{{ booking.startTime | date:'shortTime' }}</p>
-            </div>
-
-            <div>
-                <label>End Time</label>
-                <p>{{ booking.endTime | date:'shortTime' }}</p>
-            </div>
+      <div class="card-left">
+        <div class="amenity">
+          {{ booking.amenityId.name }}
         </div>
 
-        <div class="status" [ngClass]="booking.status.toLowerCase()">
-            {{ booking.status }}
+        <div class="booking-meta">
+          <div class="meta-item">
+            <span>Date</span>
+            <p>{{ booking.date | date:'mediumDate' }}</p>
+          </div>
+
+          <div class="meta-item">
+            <span>Start</span>
+            <p>{{ booking.startTime | date:'shortTime' }}</p>
+          </div>
+
+          <div class="meta-item">
+            <span>End</span>
+            <p>{{ booking.endTime | date:'shortTime' }}</p>
+          </div>
         </div>
+      </div>
+
+      <div class="card-right">
+        <span class="status-badge" [ngClass]="booking.status.toLowerCase()">
+          {{ booking.status }}
+        </span>
+      </div>
 
     </div>
-    }
+  }
 
+  <h2 class="heading">Past Bookings</h2>
+
+  @for (booking of pastbookings; track booking) {
+    <div class="booking-card">
+
+      <div class="card-left">
+        <div class="amenity">
+          {{ booking.amenityId.name }}
+        </div>
+
+        <div class="booking-meta">
+          <div class="meta-item">
+            <span>Date</span>
+            <p>{{ booking.date | date:'mediumDate' }}</p>
+          </div>
+
+          <div class="meta-item">
+            <span>Start</span>
+            <p>{{ booking.startTime | date:'shortTime' }}</p>
+          </div>
+
+          <div class="meta-item">
+            <span>End</span>
+            <p>{{ booking.endTime | date:'shortTime' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-right">
+        <span class="status-badge" [ngClass]="booking.status.toLowerCase()">
+          {{ booking.status }}
+        </span>
+      </div>
+
+    </div>
+  }
 </div>

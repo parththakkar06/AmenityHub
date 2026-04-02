@@ -27,8 +27,8 @@ const verifyOTP = async (email, otp) => {
 const register = async (req, res) => {
     try {
         console.log("here")
-        const email = req.body.email
-
+        const { name, email, phone, block, flat } = req.body
+        console.log(req.body)
         const user = await userModel.findOne({ email: email })
         if (user) {
             res.status(400).json({
@@ -40,7 +40,16 @@ const register = async (req, res) => {
         req.body.password = hashedPassword
         const selectedRole = await roleModel.findOne({ role: req.body.role })
         const todayDate = new Date()
-        const newUser = await userModel.create({ ...req.body, roleId: selectedRole._id, passwordChangedAt: todayDate })
+        const newUser = await userModel.create(
+            {
+                name: name,
+                email: email,
+                phone: phone,
+                password : req.body.password,
+                address: { blockNo: block, flatNo: flat },
+                roleId: selectedRole._id,
+                passwordChangedAt: todayDate
+            })
 
         res.status(201).json({
             message: 'User Registered! Verify the Email.',
@@ -185,19 +194,19 @@ const changepassword = async (req, res) => {
                 const updatedUser = await userModel.findByIdAndUpdate(id, data, { new: true })
                 res.status(200).json({
                     message: "Password Changed",
-                    data : updatedUser
+                    data: updatedUser
                 })
             }
-        }else{
+        } else {
             res.status(400).json({
-                message : "Incorrect Password!"
+                message: "Incorrect Password!"
             })
         }
     } catch (error) {
         console.error(error)
         res.status(400).json({
-            message : "Something went wrong!",
-            error : error.message
+            message: "Something went wrong!",
+            error: error.message
         })
     }
 }

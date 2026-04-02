@@ -1,0 +1,115 @@
+<div class="page-container">
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h2>All Bookings</h2>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'all'" 
+      (click)="activeTab = 'all'">
+      All
+    </button>
+
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'pending'" 
+      (click)="activeTab = 'pending'">
+      Pending
+    </button>
+
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'accepted'" 
+      (click)="activeTab = 'accepted'">
+      Approved
+    </button>
+
+    <button 
+      class="tab" 
+      [class.active]="activeTab === 'rejected'" 
+      (click)="activeTab = 'rejected'">
+      Rejected
+    </button>
+  </div>
+
+  <!-- BOOKINGS -->
+  <div class="bookings-list">
+
+    @for (booking of bookings; track booking) {
+
+      @if (
+        activeTab === 'all' ||
+        booking.status.toLowerCase() === activeTab
+      ) {
+
+        <div class="booking-card">
+
+          <!-- INFO -->
+          <div class="booking-info">
+
+            <div class="top-row">
+              <h3>{{ booking.userId.name }}</h3>
+
+              <span class="status" [ngClass]="booking.status.toLowerCase()">
+                {{ booking.status }}
+              </span>
+            </div>
+
+            <p class="sub">
+              Block {{ booking.userId.address.blockNo }},
+              Flat {{ booking.userId.address.flatNo }}
+            </p>
+
+            <p><strong>Amenity:</strong> {{ booking.amenityId.name }}</p>
+
+            <p>
+              <strong>Time:</strong>
+              {{ booking.startTime | date:'shortTime' }} -
+              {{ booking.endTime | date:'shortTime' }}
+            </p>
+
+            <p><strong>Date:</strong> {{ booking.date | date:'mediumDate' }}</p>
+
+          </div>
+
+          <!-- ACTIONS -->
+          @if (booking.status === 'Pending') {
+            <div class="actions">
+              <button class="accept-btn">✔</button>
+              <button class="reject-btn">✖</button>
+            </div>
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+
+    <div class="summary-card">
+      <h4>Total</h4>
+      <!-- <p>{{ totalBookings }}</p> -->
+    </div>
+
+    <div class="summary-card approved">
+      <h4>Approved</h4>
+      <!-- <p>{{ approvedBookings }}</p> -->
+    </div>
+
+    <div class="summary-card rejected">
+      <h4>Rejected</h4>
+      <!-- <p>{{ rejectedBookings }}</p> -->
+    </div>
+
+  </div>
+
+</div>
