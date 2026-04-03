@@ -9,6 +9,9 @@ routes.get('/bookings/:id',authMiddleware,bookingController.getBookingsByUserId)
 routes.get('/pastbookings/:id',authMiddleware,bookingController.getPastBookingsByUserId)
 routes.get("/getbookingscount",authMiddleware,bookingController.getBookingsCount)
 routes.get("/getrevenue",authMiddleware,bookingController.getRevenue)
-
+routes.get("/approvedcount",authMiddleware,bookingController.getAllAcceptedBookings)
+routes.get("/rejectedcount",authMiddleware,bookingController.getAllRejectedBookings)
+routes.get("/revenuebyamenity",authMiddleware,bookingController.getRevenueByAmenity)
+routes.put('/status/:id',authMiddleware,bookingController.statusChange)
 
 module.exports = routes

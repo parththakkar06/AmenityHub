@@ -33,4 +33,20 @@ export class BookingService {
   getAllBookings(){
     return this.http.get('http://localhost:3000/booking/bookings',{withCredentials : true})
   }
+
+  getApprovedBookings(){
+    return this.http.get('http://localhost:3000/booking/approvedcount',{withCredentials : true})
+  }
+  
+  getRejectedBookings(){
+    return this.http.get('http://localhost:3000/booking/rejectedcount',{withCredentials : true})
+  }
+
+  getRevenueByAmenity(){
+    return this.http.get('http://localhost:3000/booking/revenuebyamenity',{withCredentials : true})
+  }
+
+  sendStatus(id : string,credentials : object){
+    return this.http.put('http://localhost:3000/booking/status'+'/'+id,credentials,{withCredentials : true})
+  }
 }

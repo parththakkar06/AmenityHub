@@ -1,4 +1,5 @@
 const amenityModel = require('../models/AmenityModel')
+const BookingModel = require('../models/BookingModel')
 
 const getAllAmenities = async (req, res) => {
     try {
@@ -35,7 +36,7 @@ const deleteAmenityById = async (req, res) => {
     try {
         const id = req.params.id
         const deletedAmenity = await amenityModel.findByIdAndDelete(id)
-
+        await BookingModel.findByIdAndDelete(id)
         res.status(201).json({
             message: "Deleted Amenity Successfully!",
             data: deletedAmenity

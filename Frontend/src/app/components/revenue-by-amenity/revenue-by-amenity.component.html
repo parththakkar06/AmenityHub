@@ -1,0 +1,32 @@
+<div class="revenue-container">
+
+  <h2>Total Revenue per Amenity</h2>
+
+  <table class="revenue-table" *ngIf="revenue?.length; else noData">
+    <thead>
+      <tr>
+        <th>Amenity</th>
+        <th>Total Bookings</th>
+        <th>Total Revenue (₹)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let item of revenue">
+        <td>{{ item.amenityName }}</td>
+        <td>{{ item.totalBookings }}</td>
+        <td>{{ item.totalRevenue | number }}</td>
+      </tr>
+      <tr style="background-color: whitesmoke;">
+        <td><strong style="font-size: x-large;">Total Overall Revenue</strong></td>
+        <td></td>
+        <td style="font-size: x-large;">{{overallRevenue}}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noData>
+    <p class="no-data">No revenue data available.</p>
+  </ng-template>
+
+</div>

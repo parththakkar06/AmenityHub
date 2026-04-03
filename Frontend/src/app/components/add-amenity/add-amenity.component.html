@@ -1,1 +1,67 @@
-<p>add-amenity works!</p>
+<div class="form-container">
+
+  <h2>Add Amenity</h2>
+
+  <form [formGroup]="amenityForm" (ngSubmit)="submit(this.amenityForm.value)">
+
+    <div class="form-grid">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" formControlName="name" placeholder="Enter amenity name">
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label>Price per Hour (₹)</label>
+        <input type="number" formControlName="pricePerHour">
+      </div>
+
+      <!-- Capacity -->
+      <div class="form-group">
+        <label>Capacity</label>
+        <input type="number" formControlName="capacity">
+      </div>
+
+      <!-- Location -->
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text" formControlName="location">
+      </div>
+
+    </div>
+
+    <!-- Description -->
+    <div class="form-group full">
+      <label>Description</label>
+      <textarea formControlName="description" rows="3"></textarea>
+    </div>
+
+    <!-- Availability -->
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Opening Time</label>
+        <input type="number" formControlName="openingTime" placeholder="e.g. 6">
+      </div>
+
+      <div class="form-group">
+        <label>Closing Time</label>
+        <input type="number" formControlName="closingTime" placeholder="e.g. 22">
+      </div>
+    </div>
+
+    <!-- Rules -->
+    <div class="form-group full">
+      <label>Rules (comma separated)</label>
+      <input type="text" formControlName="rules" placeholder="No smoking, No food">
+    </div>
+
+    <!-- Submit -->
+    <div class="form-actions">
+      <button type="submit">Add Amenity</button>
+    </div>
+
+  </form>
+
+</div>

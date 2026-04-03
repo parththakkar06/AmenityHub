@@ -1,0 +1,50 @@
+.revenue-container {
+  padding: 24px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.revenue-container h2 {
+  margin-bottom: 16px;
+  color: #222;
+}
+
+.revenue-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.revenue-table thead {
+  background: #f3f4f6;
+}
+
+.revenue-table th,
+.revenue-table td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.revenue-table th {
+  font-weight: 600;
+  color: #444;
+}
+
+.revenue-table tbody tr {
+  border-top: 1px solid #e5e7eb;
+}
+
+.revenue-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.revenue-table td:last-child {
+  font-weight: 600;
+  color: #111;
+}
+
+.no-data {
+  margin-top: 10px;
+  color: #777;
+}

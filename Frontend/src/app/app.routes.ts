@@ -11,6 +11,7 @@ import { AddAmenityComponent } from './components/add-amenity/add-amenity.compon
 import { ViewAmenitiesComponent } from './components/view-amenities/view-amenities.component';
 import { AdminBookingComponent } from './components/admin-booking/admin-booking.component';
 import { RegisteredUsersComponent } from './components/registered-users/registered-users.component';
+import { RevenueByAmenityComponent } from './components/revenue-by-amenity/revenue-by-amenity.component';
 
 export const routes: Routes = [
     {
@@ -60,5 +61,9 @@ export const routes: Routes = [
     {
         path: 'dashboard/registered-users',
         component: RegisteredUsersComponent
+    },
+    {
+        path: 'dashboard/revenuebyamenity',
+        component: RevenueByAmenityComponent
     }
 ];

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-booking',
@@ -9,16 +10,90 @@ import { CommonModule } from '@angular/common';
   styleUrl: './admin-booking.component.css'
 })
 export class AdminBookingComponent {
-  bookings : any
+  bookings: any
   activeTab = 'all'
-  constructor(private bookingService : BookingService){}
+  totalbookings: any
+  approvedbookings: any
+  rejectedbookings: any
 
-  ngOnInit(){
+  constructor(private bookingService: BookingService , private route : Router , private cdr : ChangeDetectorRef) { }
+
+  ngOnInit() {
     this.bookingService.getAllBookings().subscribe({
-      next : (book) => {
+      next: (book) => {
         this.bookings = book
         console.log(book)
         this.bookings = this.bookings.data
+      }
+    })
+
+    this.bookingService.getApprovedBookings().subscribe({
+      next: (count) => {
+        this.approvedbookings = count
+        this.approvedbookings = this.approvedbookings.bookings
+      }
+    })
+
+    this.bookingService.getRejectedBookings().subscribe({
+      next: (count) => {
+        this.rejectedbookings = count
+        this.rejectedbookings = this.rejectedbookings.data
+        console.log(count)
+      }
+    })
+
+    this.bookingService.getBookingsCount().subscribe({
+      next: (count) => {
+        this.totalbookings = count
+        this.totalbookings = this.totalbookings.count
+      }
+    })
+  }
+
+  sendStatus(id: string, stat: string) {
+    if (stat === 'accept') {
+      const status = { status: "Accepted" }
+      this.bookingService.sendStatus(id,status).subscribe(()=>{
+        this.getBookings()
+      })
+    }
+
+    if (stat === 'reject') {
+      const status = { status: "Rejected" }
+      this.bookingService.sendStatus(id,status).subscribe(()=>{
+        this.getBookings()
+      })
+    }
+  }
+
+
+  getBookings(){
+    this.bookingService.getAllBookings().subscribe({
+      next: (book) => {
+        this.bookings = book
+        console.log(book)
+        this.bookings = this.bookings.data
+      }
+    })
+        this.bookingService.getApprovedBookings().subscribe({
+      next: (count) => {
+        this.approvedbookings = count
+        this.approvedbookings = this.approvedbookings.bookings
+      }
+    })
+
+    this.bookingService.getRejectedBookings().subscribe({
+      next: (count) => {
+        this.rejectedbookings = count
+        this.rejectedbookings = this.rejectedbookings.data
+        console.log(count)
+      }
+    })
+
+    this.bookingService.getBookingsCount().subscribe({
+      next: (count) => {
+        this.totalbookings = count
+        this.totalbookings = this.totalbookings.count
       }
     })
   }

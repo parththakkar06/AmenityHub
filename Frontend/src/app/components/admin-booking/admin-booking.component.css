@@ -102,17 +102,17 @@
   font-weight: 500;
 }
 
-.status.pending {
+.status.Pending {
   background: #fff4e5;
   color: #ff9800;
 }
 
-.status.accepted {
+.status.Accepted {
   background: #e8f5e9;
   color: #2e7d32;
 }
 
-.status.rejected {
+.status.Rejected {
   background: #fdecea;
   color: #d32f2f;
 }

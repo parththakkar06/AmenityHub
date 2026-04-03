@@ -17,4 +17,8 @@ export class AmenitiesService {
   getAmenityCount(){
     return this.http.get('http://localhost:3000/amenity/getamenitycount',{withCredentials : true})
   }
+
+  deleteAmenity(id : string){
+    return this.http.delete('http://localhost:3000/amenity/amenities'+'/'+id,{withCredentials : true})
+  }
 }

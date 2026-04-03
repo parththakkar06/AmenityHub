@@ -21,4 +21,22 @@ export class ViewAmenitiesComponent {
       }
     })
   }
+
+
+  deleteAmenity(id : string){
+    this.amenityService.deleteAmenity(id).subscribe(()=>{
+      this.getAmenities()
+    })
+  }
+
+  getAmenities(){
+    this.amenityService.getAmenities().subscribe({
+      next : (a) => {
+        this.amenities = a
+        this.amenities = this.amenities.data
+        console.log(this.amenities)
+      }
+    })
+  }
+
 }

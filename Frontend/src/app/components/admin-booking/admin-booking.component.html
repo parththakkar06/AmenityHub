@@ -16,22 +16,22 @@
 
     <button 
       class="tab" 
-      [class.active]="activeTab === 'pending'" 
-      (click)="activeTab = 'pending'">
+      [class.active]="activeTab === 'Pending'" 
+      (click)="activeTab = 'Pending'">
       Pending
     </button>
 
     <button 
       class="tab" 
-      [class.active]="activeTab === 'accepted'" 
-      (click)="activeTab = 'accepted'">
+      [class.active]="activeTab === 'Accepted'" 
+      (click)="activeTab = 'Accepted'">
       Approved
     </button>
 
     <button 
       class="tab" 
-      [class.active]="activeTab === 'rejected'" 
-      (click)="activeTab = 'rejected'">
+      [class.active]="activeTab === 'Rejected'" 
+      (click)="activeTab = 'Rejected'">
       Rejected
     </button>
   </div>
@@ -43,7 +43,7 @@
 
       @if (
         activeTab === 'all' ||
-        booking.status.toLowerCase() === activeTab
+        booking.status === activeTab
       ) {
 
         <div class="booking-card">
@@ -54,7 +54,7 @@
             <div class="top-row">
               <h3>{{ booking.userId.name }}</h3>
 
-              <span class="status" [ngClass]="booking.status.toLowerCase()">
+              <span class="status" [ngClass]="booking.status">
                 {{ booking.status }}
               </span>
             </div>
@@ -79,8 +79,8 @@
           <!-- ACTIONS -->
           @if (booking.status === 'Pending') {
             <div class="actions">
-              <button class="accept-btn">✔</button>
-              <button class="reject-btn">✖</button>
+              <button class="accept-btn" (click)="sendStatus(booking._id,'accept')">✔</button>
+              <button class="reject-btn" (click)="sendStatus(booking._id,'reject')">✖</button>
             </div>
           }
 
@@ -97,17 +97,17 @@
 
     <div class="summary-card">
       <h4>Total</h4>
-      <!-- <p>{{ totalBookings }}</p> -->
+      <p>{{ totalbookings }}</p>
     </div>
 
     <div class="summary-card approved">
       <h4>Approved</h4>
-      <!-- <p>{{ approvedBookings }}</p> -->
+      <p>{{ approvedbookings }}</p>
     </div>
 
     <div class="summary-card rejected">
       <h4>Rejected</h4>
-      <!-- <p>{{ rejectedBookings }}</p> -->
+      <p>{{ rejectedbookings }}</p>
     </div>
 
   </div>
