@@ -21,4 +21,17 @@ export class AmenitiesService {
   deleteAmenity(id : string){
     return this.http.delete('http://localhost:3000/amenity/amenities'+'/'+id,{withCredentials : true})
   }
+
+  addAmenity(credentials : object){
+    return this.http.post('http://localhost:3000/amenity/amenities', credentials , {withCredentials : true})
+  }
+
+  editAmenity(credentials : object, id : string){
+    return this.http.put('http://localhost:3000/amenity/amenities'+'/'+id , credentials , {withCredentials : true})
+  }
+
+  summary(){
+    return this.http.get('http://localhost:3000/amenity/amenitysummary',{withCredentials : true})
+  }
+
 }

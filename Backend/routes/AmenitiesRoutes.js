@@ -8,5 +8,6 @@ routes.post("/amenities",authMiddleware,amenityController.addAmenity)
 routes.delete("/amenities/:id",authMiddleware,amenityController.deleteAmenityById)
 routes.put("/amenities/:id",authMiddleware,amenityController.updateAmenityById)
 routes.get("/getamenitycount",authMiddleware,amenityController.getAmenityCount)
+routes.get("/amenitysummary",authMiddleware,amenityController.amenityUtilized)
 
 module.exports = routes

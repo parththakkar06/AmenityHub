@@ -18,7 +18,7 @@
         <h3>Add Amenity</h3>
         <p class="card-desc">Create new facility</p>
       </div>
-      <button class="card-btn primary">+ Add Amenity</button>
+      <button class="card-btn primary" [routerLink]="'/dashboard/add-amenity'">+ Add Amenity</button>
     </div>
 
     <div class="card">
@@ -50,9 +50,9 @@
     <div class="card">
       <div class="card-content">
         <h3>Amenity Utilization Summary</h3>
-        <p class="card-desc">Overall Utilization of Amenities</p>
+        <p class="card-desc" >Overall Utilization of Amenities</p>
       </div>
-      <button class="card-btn">View Summary</button>
+      <button class="card-btn" [routerLink]="'/dashboard/amenitystat'">View Summary</button>
     </div>
 
 

@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { AmenitiesService } from '../../services/amenities.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-view-amenities',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './view-amenities.component.html',
   styleUrl: './view-amenities.component.css'
 })
 export class ViewAmenitiesComponent {
   amenities : any
 
-  constructor(private amenityService : AmenitiesService){}
+  constructor(private amenityService : AmenitiesService , private route : Router){}
 
   ngOnInit(){
     this.amenityService.getAmenities().subscribe({
@@ -39,4 +40,16 @@ export class ViewAmenitiesComponent {
     })
   }
 
+  editAmenity(amenity : object,id : string){
+    // this.amenityService.editAmenity(amenity,id).subscribe({
+    //   next : () => {
+
+    //   },
+    //   error : (e) => {
+    //     console.error(e)
+    //   }
+    // })    
+    console.log(amenity,id)
+    this.route.navigate(['/dashboard/add-amenity'],{state : {amenity,id}})
+  }
 }

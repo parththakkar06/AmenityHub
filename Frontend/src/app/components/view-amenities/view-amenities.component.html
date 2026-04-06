@@ -2,7 +2,7 @@
 
   <div class="page-header">
     <h2>All Amenities</h2>
-    <button class="add-btn">+ Add Amenity</button>
+    <button class="add-btn" [routerLink]="'/dashboard/add-amenity'">+ Add Amenity</button>
   </div>
 
   <div class="amenities-grid">
@@ -21,7 +21,7 @@
         </div>
 
         <div class="actions">
-          <button class="edit-btn">Edit</button>
+          <button class="edit-btn" (click) = "editAmenity(amenity,amenity._id)">Edit</button>
           <button class="delete-btn" (click)="deleteAmenity(amenity._id)">Delete</button>
         </div>
 

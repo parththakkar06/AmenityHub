@@ -6,7 +6,7 @@ import { HeaderComponent } from "../../shared/header/header.component";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, RouterLinkActive, HeaderComponent, RouterOutlet],
+  imports: [RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
