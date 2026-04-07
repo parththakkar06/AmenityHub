@@ -84,14 +84,24 @@ const verify = async (req, res) => {
             sameSite: "Lax",
             secure: false
         })
+        const date = new Date(user.passwordChangedAt)
+        date.setDate(date.getDate() + 60)
+        const today = new Date()
+        console.log(date)
+        change = false  
+        if(today > date){
+            change = true
+        }
+
+    
         res.status(200).json({
             message: "OTP Verified. Logging IN.",
-            token: `Bearer ${token}`,
             user: {
                 id: user._id,
                 name: user.name,
                 email: user.email,
-                role: user.roleId.role
+                role: user.roleId.role,
+                bool: change
             }
         })
     } else {
@@ -176,6 +186,7 @@ const changepassword = async (req, res) => {
         console.log("here")
         const id = req.params.id
         const user = await userModel.findById(id)
+        const today = new Date()
         const { oldPass, newPass, confirmNewPass } = req.body
 
         if (!user) {
@@ -190,7 +201,7 @@ const changepassword = async (req, res) => {
                 })
             } else {
                 hashedPassword = await bcrypt.hash(newPass, 10)
-                const data = { password: hashedPassword }
+                const data = { password: hashedPassword , passwordChangedAt : today}
                 const updatedUser = await userModel.findByIdAndUpdate(id, data, { new: true })
                 res.status(200).json({
                     message: "Password Changed",

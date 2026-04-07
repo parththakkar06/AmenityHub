@@ -18,6 +18,15 @@ export class ChangePasswordComponent {
     user: any
     ngOnInit() {
         this.user = this.saveUser.getUser()
+        if (this.user.bool == true) {
+            this.openConfirm(
+                'You have to change your password due to security reasons!!',
+                
+                () => {
+                    
+                }
+            );
+        }
     }
 
     changePasswordForm = new FormGroup({
@@ -49,4 +58,30 @@ export class ChangePasswordComponent {
             }
         })
     }
+
+
+    showConfirm = false;
+    title = '';
+    private confirmCallback: () => void = () => { };
+
+    openConfirm(title: string, callback: () => void) {
+        this.title = title;
+        this.confirmCallback = callback;
+        this.showConfirm = true;
+    }
+
+    onConfirm() {
+        this.confirmCallback();
+        this.saveUser.setBool()
+        this.user.bool = false
+        localStorage.setItem('user',JSON.stringify(this.user))
+        this.showConfirm = false;
+    }
+
+    onCancel() {
+        this.showConfirm = false;
+        this.saveUser.clearUser()
+        this.route.navigate(['/login'])
+    }
+
 }

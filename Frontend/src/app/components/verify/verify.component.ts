@@ -43,9 +43,10 @@ export class VerifyComponent {
     this.data = { otp : this.otpForm.value.otp, email: this.mail }
     console.log('this is data',this.data)
     this.userService.verify(this.data).subscribe({
-      next: () => {
+      next: (data : any) => {
         this.toast.show('Login Successfull','success')
-        this.saveUser.setUser(this.user)
+        this.saveUser.setUser(data.user)
+        console.log(data.user)
         if(this.user.role === "ADMIN"){
           this.router.navigate(['/dashboard'])
         }else{

@@ -9,5 +9,6 @@ routes.delete("/amenities/:id",authMiddleware,amenityController.deleteAmenityByI
 routes.put("/amenities/:id",authMiddleware,amenityController.updateAmenityById)
 routes.get("/getamenitycount",authMiddleware,amenityController.getAmenityCount)
 routes.get("/amenitysummary",authMiddleware,amenityController.amenityUtilized)
+routes.get("/trends",authMiddleware,amenityController.trend)
 
 module.exports = routes

@@ -103,7 +103,30 @@ const amenityUtilized = async (req, res) => {
         date: { $lt: new Date() },
     }).populate('amenityId', 'name').lean()
 
-    const something = await BookingModel.aggregate([
+
+    const time = bookings.map(b => ({
+        ...b,
+        diff: (b.endTime - b.startTime) / 3600000
+    }))
+
+    const output = {}
+
+    time.forEach(b => {
+        if (!output[b.amenityId.name]) {
+            output[b.amenityId.name] = 0
+        }
+        output[b.amenityId.name] += b.diff
+    })
+
+    console.log(output)
+
+    res.json({
+        data: output
+    })
+}
+
+const trend = async (req, res) => {
+    const trend = await BookingModel.aggregate([
         {
             $match: {
                 status: "Accepted"
@@ -139,41 +162,27 @@ const amenityUtilized = async (req, res) => {
         },
         {
             $group: {
-                _id: {
-                    year: { $year: "$startTime" },
-                    month: { $month: "$startTime" }
-                },
+                _id: "$date",
                 totalRevenue: { $sum: "$revenue" }
             }
         },
         {
+            $project: {
+                _id: 1,
+                totalRevenue: 1,
+                date : 1
+            }
+        },
+        {
             $sort: {
-                "_id.year": 1,
-                "_id.month": 1
+                "_id": 1,
             }
         }
     ])
 
-    console.log(something)
-
-    const time = bookings.map(b => ({
-        ...b,
-        diff: (b.endTime - b.startTime) / 3600000
-    }))
-
-    const output = {}
-
-    time.forEach(b => {
-        if (!output[b.amenityId.name]) {
-            output[b.amenityId.name] = 0
-        }
-        output[b.amenityId.name] += b.diff
-    })
-
-    console.log(output)
-
     res.json({
-        data: output
+        message: "sent booking trends!",
+        data: trend
     })
 }
 
@@ -183,5 +192,6 @@ module.exports = {
     deleteAmenityById,
     updateAmenityById,
     getAmenityCount,
-    amenityUtilized
+    amenityUtilized,
+    trend
 }

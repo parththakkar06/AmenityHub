@@ -34,4 +34,7 @@ export class AmenitiesService {
     return this.http.get('http://localhost:3000/amenity/amenitysummary',{withCredentials : true})
   }
 
+  trend(){
+    return this.http.get('http://localhost:3000/amenity/trends',{withCredentials: true})
+  }
 }

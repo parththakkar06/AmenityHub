@@ -16,6 +16,10 @@ export class SaveuserService {
     localStorage.setItem('user',JSON.stringify(user))
   }
 
+  setBool(){
+    this.userSubject.next({...this.user$ , bool : false})
+  }
+
   getUser(){
     return this.userSubject.value
   }

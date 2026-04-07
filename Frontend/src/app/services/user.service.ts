@@ -28,4 +28,6 @@ export class UserService {
   changepassword(id : string,credentials : object){
     return this.http.put("http://localhost:3000/user/changepassword"+"/"+id,credentials,{withCredentials : true})
   }
+
+  
 }

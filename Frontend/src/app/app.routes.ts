@@ -13,15 +13,21 @@ import { AdminBookingComponent } from './components/admin-booking/admin-booking.
 import { RegisteredUsersComponent } from './components/registered-users/registered-users.component';
 import { RevenueByAmenityComponent } from './components/revenue-by-amenity/revenue-by-amenity.component';
 import { AmenityUtilizationComponent } from './components/amenity-utilization/amenity-utilization.component';
+import { BookingTrendComponent } from './components/booking-trend/booking-trend.component';
+import { userGuard } from './guards/user.guard';
+import { isAdminGuard } from './guards/is-admin.guard';
+import { isLoggedInGuard } from './guards/is-logged-in.guard';
 
 export const routes: Routes = [
     {
         path: 'login',
-        component: LoginComponent
+        component: LoginComponent,
+        canActivate: [isLoggedInGuard]
     },
     {
         path: 'register',
-        component: RegisterComponent
+        component: RegisterComponent,
+        canActivate:[isLoggedInGuard]
     },
     {
         path: 'verifyotp',
@@ -29,46 +35,62 @@ export const routes: Routes = [
     },
     {
         path: 'home',
-        component: HomeComponent
+        component: HomeComponent,
+        canActivate: [userGuard]
     },
     {
         path: 'mybookings',
-        component: MybookingsComponent
+        component: MybookingsComponent,
+        canActivate: [userGuard]
     },
     {
         path: 'book-amenity',
-        component: BookAmenityComponent
+        component: BookAmenityComponent,
+        canActivate: [userGuard]
     },
     {
         path: 'change-password',
-        component: ChangePasswordComponent
+        component: ChangePasswordComponent,
+        canActivate: [userGuard]
     },
     {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [userGuard,isAdminGuard]
     },
     {
         path: 'dashboard/add-amenity',
-        component: AddAmenityComponent
+        component: AddAmenityComponent,
+        canActivate: [userGuard,isAdminGuard]
     },
     {
         path: 'dashboard/view-amenities',
-        component: ViewAmenitiesComponent
+        component: ViewAmenitiesComponent,
+        canActivate: [userGuard,isAdminGuard]
     },
     {
         path: 'dashboard/bookings',
-        component: AdminBookingComponent
+        component: AdminBookingComponent,
+        canActivate: [userGuard,isAdminGuard]
     },
     {
         path: 'dashboard/registered-users',
-        component: RegisteredUsersComponent
+        component: RegisteredUsersComponent,
+        canActivate: [userGuard,isAdminGuard]
     },
     {
         path: 'dashboard/revenuebyamenity',
-        component: RevenueByAmenityComponent
+        component: RevenueByAmenityComponent,
+        canActivate: [userGuard,isAdminGuard]
     },
     {
         path: 'dashboard/amenitystat',
-        component : AmenityUtilizationComponent
+        component : AmenityUtilizationComponent,
+        canActivate: [userGuard,isAdminGuard]
+    },
+    {
+        path: 'dashboard/bookingtrends',
+        component: BookingTrendComponent,
+        canActivate: [userGuard,isAdminGuard]
     }
 ];
