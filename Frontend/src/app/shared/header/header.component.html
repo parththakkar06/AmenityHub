@@ -1,31 +1,24 @@
 <mat-toolbar class="navbar">
 
-  <!-- Glow layer -->
   <div class="nav-glow"></div>
 
-  <!-- Left -->
   <div class="nav-left">
     <div class="logo">Amenity Hub</div>
   </div>
 
-  <!-- Center -->
    @if(user){
   <div class="nav-center" >
 
     <a class="nav-link" *ngIf="user?.role === 'USER'" routerLink="/home" routerLinkActive="active">Home</a>
     <a class="nav-link" routerLink="/mybookings" *ngIf="user?.role === 'USER'"   routerLinkActive="active">Bookings</a>
-    <!-- 
-        -->
     <a class="nav-link" *ngIf="user?.role === 'ADMIN'" routerLink="/dashboard" routerLinkActive="active">
       Dashboard
     </a>
 
-    <!-- Moving indicator -->
     <div class="nav-indicator"></div>
 
   </div>
 }
-  <!-- Right -->
   <div class="nav-right">
 
     <ng-container *ngIf="user; else guest">

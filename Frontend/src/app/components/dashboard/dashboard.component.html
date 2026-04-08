@@ -68,3 +68,15 @@
 
 </div>
 
+
+<div class="overlay" *ngIf="showConfirm">
+  <div class="confirm-box">
+
+    <h1>{{ title }}</h1>
+    <h4>{{ subject }}</h4>
+    <div class="actions">
+      <button class="confirm" (click)="onConfirm()">Okay</button>
+    </div>
+
+  </div>
+</div>

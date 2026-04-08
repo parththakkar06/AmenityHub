@@ -29,9 +29,9 @@ export class BookAmenityComponent {
   }
 
   bookingForm = new FormGroup({
-    date: new FormControl('2026-04-03', [Validators.required]),
-    startTime: new FormControl('13:25', [Validators.required]),
-    endTime: new FormControl('14:25', [Validators.required])
+    date: new FormControl('', [Validators.required]),
+    startTime: new FormControl('', [Validators.required]),
+    endTime: new FormControl('', [Validators.required])
   })
 
   get date() {
@@ -91,6 +91,7 @@ export class BookAmenityComponent {
       console.log("hours..", hours, "..mins..", mins)
       // console.log(this.pricePerHour)
       amount = (hours * this.priceph) + (mins * ( this.priceph / 60))
+      amount = Math.round(amount * 100)/100
       console.log(amount)
     } else {
       mins = bookingtime

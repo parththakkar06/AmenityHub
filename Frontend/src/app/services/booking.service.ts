@@ -49,4 +49,8 @@ export class BookingService {
   sendStatus(id : string,credentials : object){
     return this.http.put('http://localhost:3000/booking/status'+'/'+id,credentials,{withCredentials : true})
   }
+
+  getPendingBookings(){
+    return this.http.get('http://localhost:3000/booking/pendingcount',{withCredentials:true})
+  }
 }

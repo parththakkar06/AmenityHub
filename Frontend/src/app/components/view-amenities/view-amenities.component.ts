@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AmenitiesService } from '../../services/amenities.service';
 import { Router, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-view-amenities',
@@ -11,7 +12,7 @@ import { Router, RouterLink } from '@angular/router';
 export class ViewAmenitiesComponent {
   amenities : any
 
-  constructor(private amenityService : AmenitiesService , private route : Router){}
+  constructor(private location : Location,private amenityService : AmenitiesService , private route : Router){}
 
   ngOnInit(){
     this.amenityService.getAmenities().subscribe({
@@ -38,6 +39,10 @@ export class ViewAmenitiesComponent {
         console.log(this.amenities)
       }
     })
+  }
+
+  back(){
+    this.location.back()
   }
 
   editAmenity(amenity : object,id : string){

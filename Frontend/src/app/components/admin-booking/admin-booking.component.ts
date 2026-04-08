@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +16,7 @@ export class AdminBookingComponent {
   approvedbookings: any
   rejectedbookings: any
 
-  constructor(private bookingService: BookingService , private route : Router , private cdr : ChangeDetectorRef) { }
+  constructor(private location : Location,private bookingService: BookingService , private route : Router , private cdr : ChangeDetectorRef) { }
 
   ngOnInit() {
     this.bookingService.getAllBookings().subscribe({
@@ -50,6 +50,9 @@ export class AdminBookingComponent {
     })
   }
 
+  back(){
+    this.location.back()
+  }
   sendStatus(id: string, stat: string) {
     if (stat === 'accept') {
       const status = { status: "Accepted" }

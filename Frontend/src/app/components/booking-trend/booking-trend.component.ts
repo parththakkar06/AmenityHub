@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AmenitiesService } from '../../services/amenities.service';
 import { Chart } from 'chart.js';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 
 @Component({
   selector: 'app-booking-trend',
@@ -11,7 +11,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 })
 export class BookingTrendComponent implements OnInit, AfterViewInit {
 
-  constructor(private amenityService: AmenitiesService) { }
+  constructor(private amenityService: AmenitiesService,private location : Location) { }
 
   data: any
   chart: any
@@ -36,6 +36,10 @@ export class BookingTrendComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.createChart();
+  }
+
+  back(){
+    this.location.back()
   }
 
   createChart() {

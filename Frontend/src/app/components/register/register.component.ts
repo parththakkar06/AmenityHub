@@ -18,12 +18,12 @@ export class RegisterComponent {
   phoneregex = /^[6-9]\d{9}$/;
 
   registerForm = new FormGroup({
-    name : new FormControl('Sam',[Validators.required]),
-    email : new FormControl('sam@yopmail.com',[Validators.required, Validators.email]),
-    password : new FormControl('111111',[Validators.required , Validators.minLength(6)]),
-    phone : new FormControl('9879879871',[Validators.required, Validators.pattern(this.phoneregex)]),
-    block : new FormControl('A',Validators.required),
-    flat : new FormControl('101',Validators.required),
+    name : new FormControl('',[Validators.required]),
+    email : new FormControl('',[Validators.required, Validators.email]),
+    password : new FormControl('',[Validators.required , Validators.minLength(6)]),
+    phone : new FormControl('',[Validators.required, Validators.pattern(this.phoneregex)]),
+    block : new FormControl('',Validators.required),
+    flat : new FormControl('',Validators.required),
     role : new FormControl('USER')
   })
   

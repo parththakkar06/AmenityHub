@@ -129,3 +129,27 @@
     grid-template-columns: 1fr;
   }
 }
+
+.back-btn-glass {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.25s ease;
+}
+
+.back-btn-glass:hover {
+  box-shadow: 0 6px 18px rgba(79,70,229,0.25);
+  transform: scale(1.1);
+}

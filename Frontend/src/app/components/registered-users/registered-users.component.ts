@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-registered-users',
@@ -10,7 +11,7 @@ import { UserService } from '../../services/user.service';
 export class RegisteredUsersComponent {
   users : any
 
-  constructor(private userService : UserService){}
+  constructor(private location : Location,private userService : UserService){}
 
   ngOnInit(){
     this.userService.getusers().subscribe({
@@ -21,5 +22,9 @@ export class RegisteredUsersComponent {
         this.users = this.users.data
       }
     })
+  }
+
+  back(){
+    this.location.back()
   }
 }

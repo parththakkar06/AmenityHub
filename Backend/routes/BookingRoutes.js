@@ -13,5 +13,6 @@ routes.get("/approvedcount",authMiddleware,bookingController.getAllAcceptedBooki
 routes.get("/rejectedcount",authMiddleware,bookingController.getAllRejectedBookings)
 routes.get("/revenuebyamenity",authMiddleware,bookingController.getRevenueByAmenity)
 routes.put('/status/:id',authMiddleware,bookingController.statusChange)
+routes.get("/pendingcount",authMiddleware,bookingController.getAllPendingBookings)
 
 module.exports = routes

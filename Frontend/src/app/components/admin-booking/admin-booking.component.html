@@ -1,11 +1,12 @@
-<div class="page-container">
 
-  <!-- HEADER -->
+<div class="page-container">
+<button class="back-btn-glass" (click)="back()">
+  <span>←</span>
+</button>
   <div class="page-header">
     <h2>All Bookings</h2>
   </div>
 
-  <!-- TABS -->
   <div class="tabs">
     <button 
       class="tab" 
@@ -36,7 +37,6 @@
     </button>
   </div>
 
-  <!-- BOOKINGS -->
   <div class="bookings-list">
 
     @for (booking of bookings; track booking) {
@@ -48,7 +48,6 @@
 
         <div class="booking-card">
 
-          <!-- INFO -->
           <div class="booking-info">
 
             <div class="top-row">
@@ -76,7 +75,6 @@
 
           </div>
 
-          <!-- ACTIONS -->
           @if (booking.status === 'Pending') {
             <div class="actions">
               <button class="accept-btn" (click)="sendStatus(booking._id,'accept')">✔</button>

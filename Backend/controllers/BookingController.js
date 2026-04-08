@@ -48,6 +48,22 @@ const getAllRejectedBookings = async (req, res) => {
     }
 }
 
+
+const getAllPendingBookings = async (req, res) => {
+    try {
+        const bookings = await bookingModel.find({ status: "Pending" }).countDocuments()
+        res.status(201).json({
+            data: bookings
+        })
+    } catch (error) {
+        res.json({
+            message: "Error occured while fetching pending bookings",
+            error: error.message
+        })
+    }
+}
+
+
 const addBookings = async (req, res) => {
     try {
         console.log("here")
@@ -334,5 +350,6 @@ module.exports = {
     getPastBookingsByUserId,
     getBookingsCount,
     getRevenueByAmenity,
-    statusChange
+    statusChange,
+    getAllPendingBookings
 }

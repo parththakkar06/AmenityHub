@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AmenitiesService } from '../../services/amenities.service';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-amenity',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class AddAmenityComponent {
 
-  constructor(private amenityService: AmenitiesService, private route: Router) {
+  constructor(private amenityService: AmenitiesService, private route: Router,private location1: Location) {
 
     const nav = route.getCurrentNavigation()
     const data: any = nav?.extras?.state
@@ -46,14 +47,14 @@ export class AddAmenityComponent {
   }
 
   amenityForm = new FormGroup({
-    name: new FormControl('Club House'),
-    pricePerHour: new FormControl('350'),
-    capacity: new FormControl('30'),
-    location: new FormControl('near H block'),
-    description: new FormControl('A well maintained space with a lots of indoor games.'),
-    openingTime: new FormControl('10'),
-    closingTime: new FormControl('22'),
-    rules: new FormControl('No Smoking   ,   No Food  ')
+    name: new FormControl('',[Validators.required]),
+    pricePerHour: new FormControl('',[Validators.required]),
+    capacity: new FormControl('',[Validators.required]),
+    location: new FormControl('',[Validators.required]),
+    description: new FormControl('',[Validators.required]),
+    openingTime: new FormControl('',[Validators.required]),
+    closingTime: new FormControl('',[Validators.required]),
+    rules: new FormControl('',[Validators.required])
   })
 
   get name() {
@@ -81,6 +82,9 @@ export class AddAmenityComponent {
     return this.amenityForm.get('rules')
   }
 
+  back(){
+    this.location1.back()
+  }
 
   submit(data: any) {
     if (this.amenityData) {

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 
 @Component({
   selector: 'app-revenue-by-amenity',
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class RevenueByAmenityComponent {
 
-  constructor(private bookingService : BookingService){}
+  constructor(private location : Location,private bookingService : BookingService){}
 
   revenue : any
   overallRevenue = 0
@@ -24,5 +24,9 @@ export class RevenueByAmenityComponent {
         }
       }
     })
+  }
+
+  back(){
+    this.location.back()
   }
 }
