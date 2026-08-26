@@ -1,4 +1,3 @@
-
 <div class="page-container">
 <button class="back-btn-glass" (click)="back()">
   <span>←</span>
@@ -10,24 +9,30 @@
 
   <div class="amenities-grid">
 
-    @for (amenity of amenities; track amenity) {
+    @for (amenity of amenities; track $index) {
       <div class="amenity-card">
 
         <div class="amenity-info">
-          <h3>{{ amenity.name }}</h3>
-          <p class="desc">{{ amenity.description }}</p>
-          <p class="desc">Open Hours : {{(amenity.availibility.openingTime)/60}}:00 - {{(amenity.availibility.closingTime)/60}}:00</p>
+          <h3>{{ amenity?.name }}</h3>
+          <p class="desc">{{ amenity?.description }}</p>
+          <p class="desc" *ngIf="amenity?.availibility">
+            Open Hours: {{ formatTime(amenity.availibility.openingTime) }} - {{ formatTime(amenity.availibility.closingTime) }}
+          </p>
         </div>
 
         <div class="amenity-meta">
-          <span>₹{{ amenity.pricePerHour }}</span>
+          <span>₹{{ amenity?.pricePerHour }} / hr</span>
         </div>
 
         <div class="actions">
-          <button class="edit-btn" (click) = "editAmenity(amenity,amenity._id)">Edit</button>
+          <button class="edit-btn" (click)="editAmenity(amenity, amenity._id)">Edit</button>
           <button class="delete-btn" (click)="deleteAmenity(amenity._id)">Delete</button>
         </div>
 
+      </div>
+    } @empty {
+      <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
+        <p>No amenities found. Click "+ Add Amenity" to create one.</p>
       </div>
     }
 

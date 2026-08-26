@@ -9,23 +9,27 @@
 
   <div class="users-grid">
 
-    @for (user of users; track user) {
+    @for (user of users; track $index) {
       <div class="user-card">
 
         <div class="user-main">
-          <h3>{{ user.name }}</h3>
-          <span class="role">{{ user.roleId.role }}</span>
+          <h3>{{ user?.name }}</h3>
+          <span class="role">{{ user?.roleId?.role || user?.role || 'USER' }}</span>
         </div>
 
         <div class="user-details">
-          <p>{{ user.email }}</p>
-          <p>{{ user.phone }}</p>
+          <p>{{ user?.email }}</p>
+          <p>{{ user?.phone }}</p>
         </div>
 
-        <div class="user-address">
-          Block {{ user.address.blockNo }}, Flat {{ user.address.flatNo }}
+        <div class="user-address" *ngIf="user?.address">
+          Block {{ user?.address?.blockNo }}, Flat {{ user?.address?.flatNo }}
         </div>
 
+      </div>
+    } @empty {
+      <div class="empty-state" style="padding: 40px; text-align: center; color: #94a3b8;">
+        <p>No registered users found.</p>
       </div>
     }
 

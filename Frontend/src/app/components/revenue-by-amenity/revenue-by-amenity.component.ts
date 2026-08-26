@@ -9,24 +9,27 @@ import { CommonModule, Location } from '@angular/common';
   styleUrl: './revenue-by-amenity.component.css'
 })
 export class RevenueByAmenityComponent {
-
-  constructor(private location : Location,private bookingService : BookingService){}
-
-  revenue : any
+  revenue: any[] = []
   overallRevenue = 0
-  ngOnInit(){
+
+  constructor(private location: Location, private bookingService: BookingService) { }
+
+  ngOnInit() {
     this.bookingService.getRevenueByAmenity().subscribe({
-      next: (r) => {
-        this.revenue = r
-        this.revenue = this.revenue.revenue
+      next: (r: any) => {
+        this.revenue = Array.isArray(r) ? r : (r?.revenue || r?.data || [])
+        this.overallRevenue = 0
         for (let i = 0; i < this.revenue.length; i++) {
-          this.overallRevenue += this.revenue[i].totalRevenue;
+          this.overallRevenue += (this.revenue[i]?.totalRevenue || 0)
         }
+      },
+      error: (err) => {
+        console.error("Error fetching revenue by amenity:", err)
       }
     })
   }
 
-  back(){
+  back() {
     this.location.back()
   }
 }

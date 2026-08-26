@@ -1,62 +1,71 @@
 const userModel = require('../models/UserModel')
 const roleModel = require('../models/RoleModel')
 const bcrypt = require('bcrypt')
-const twilio = require("twilio")
-const client = twilio(process.env.AC_SID, process.env.AUTH_TOKEN);
 const jwt = require('jsonwebtoken')
+const { sendOtpMail } = require('../utils/MailUtil')
 
+// In-memory store for OTPs: email -> { otp: string, expiresAt: number }
+const otpStore = new Map()
 
 const sendOTP = async (email) => {
-    return await client.verify.v2
-        .services(process.env.SERVICE_ID)
-        .verifications.create({
-            to: email,
-            channel: 'email'
-        })
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString()
+    const expiresAt = Date.now() + 5 * 60 * 1000 // 5 minutes expiration
+
+    otpStore.set(email, { otp: generatedOtp, expiresAt })
+    console.log(`Generated OTP for ${email}: ${generatedOtp}`)
+
+    await sendOtpMail(email, generatedOtp)
+    return { success: true }
 }
 
 const verifyOTP = async (email, otp) => {
-    return await client.verify.v2
-        .services(process.env.SERVICE_ID)
-        .verificationChecks.create({
-            to: email,
-            code: otp
-        })
+    const record = otpStore.get(email)
+    if (!record) {
+        return { valid: false }
+    }
+
+    if (record.otp === otp && Date.now() <= record.expiresAt) {
+        otpStore.delete(email) // Single-use OTP cleanup
+        return { valid: true }
+    }
+
+    return { valid: false }
 }
 
 const register = async (req, res) => {
     try {
-        console.log("here")
-        const { name, email, phone, block, flat } = req.body
-        console.log(req.body)
+        const { name, email, phone, block, flat, role, password } = req.body
         const user = await userModel.findOne({ email: email })
         if (user) {
-            res.status(400).json({
+            return res.status(400).json({
                 message: "Email already exists!"
             })
         }
 
-        const hashedPassword = await bcrypt.hash(req.body.password, 10)
-        req.body.password = hashedPassword
-        const selectedRole = await roleModel.findOne({ role: req.body.role })
-        const todayDate = new Date()
-        const newUser = await userModel.create(
-            {
-                name: name,
-                email: email,
-                phone: phone,
-                password : req.body.password,
-                address: { blockNo: block, flatNo: flat },
-                roleId: selectedRole._id,
-                passwordChangedAt: todayDate
-            })
+        const hashedPassword = await bcrypt.hash(password, 10)
+        const roleName = role || 'USER'
+        let selectedRole = await roleModel.findOne({ role: roleName })
+        if (!selectedRole) {
+            selectedRole = await roleModel.create({ role: roleName })
+        }
 
-        res.status(201).json({
-            message: 'User Registered! Verify the Email.',
+        const todayDate = new Date()
+        const newUser = await userModel.create({
+            name: name,
+            email: email,
+            phone: phone,
+            password: hashedPassword,
+            address: { blockNo: block, flatNo: flat },
+            roleId: selectedRole._id,
+            passwordChangedAt: todayDate
+        })
+
+        return res.status(201).json({
+            message: 'User Registered Successfully! Please Login.',
             data: newUser
         })
     } catch (error) {
-        res.json({
+        return res.status(500).json({
             message: "Error while creating user",
             error: error.message
         })

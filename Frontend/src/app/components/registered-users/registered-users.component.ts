@@ -1,30 +1,42 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
-import { Location } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 
 @Component({
   selector: 'app-registered-users',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './registered-users.component.html',
   styleUrl: './registered-users.component.css'
 })
-export class RegisteredUsersComponent {
-  users : any
+export class RegisteredUsersComponent implements OnInit {
+  users: any[] = []
 
-  constructor(private location : Location,private userService : UserService){}
+  constructor(
+    private location: Location,
+    private userService: UserService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
-  ngOnInit(){
+  ngOnInit() {
     this.userService.getusers().subscribe({
-      next : (u) => {
-        console.log(u)
-
-        this.users = u
-        this.users = this.users.data
+      next: (u: any) => {
+        if (u && u.data && Array.isArray(u.data)) {
+          this.users = u.data
+        } else if (Array.isArray(u)) {
+          this.users = u
+        } else {
+          this.users = []
+        }
+        console.log("Fetched users:", this.users)
+        this.cdr.detectChanges()
+      },
+      error: (err) => {
+        console.error("Error fetching users:", err)
       }
     })
   }
 
-  back(){
+  back() {
     this.location.back()
   }
 }

@@ -6,10 +6,10 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 
 const corsOptions = {
-    origin : 'http://localhost:4200',
-    methods : ['GET','POST','PUT','DELETE'],
-    allowedHeaders : ['Content-Type','Authorization'],
-    credentials : true
+    origin: 'http://localhost:4200',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }
 
 app.use(cors(corsOptions))
@@ -36,7 +36,7 @@ const bookingRoutes = require('./routes/BookingRoutes')
 app.use('/booking', bookingRoutes)
 
 const connectDb = async () => {
-    try {        
+    try {
         await mongoose.connect(process.env.MONGODB_URI)
         console.log("Database Connected Successfully")
     } catch (error) {

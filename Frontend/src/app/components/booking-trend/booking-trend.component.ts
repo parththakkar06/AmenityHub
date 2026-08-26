@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AmenitiesService } from '../../services/amenities.service';
-import { Chart } from 'chart.js';
+import { Chart } from 'chart.js/auto';
 import { CommonModule, DatePipe, Location } from '@angular/common';
 
 @Component({
@@ -11,40 +11,36 @@ import { CommonModule, DatePipe, Location } from '@angular/common';
 })
 export class BookingTrendComponent implements OnInit, AfterViewInit {
 
-  constructor(private amenityService: AmenitiesService,private location : Location) { }
+  constructor(private amenityService: AmenitiesService, private location: Location) { }
 
-  data: any
+  data: any[] = []
   chart: any
+
   ngOnInit() {
     this.amenityService.trend().subscribe({
-      next: (trend) => {
-        this.data = trend
-        this.data = this.data.data
-        console.log(this.data)
-        if (this.chart) {
-          this.updateChart();
-        }
+      next: (trend: any) => {
+        this.data = Array.isArray(trend) ? trend : (trend?.data || [])
+        console.log("Fetched trend:", this.data)
+        this.updateChart();
       },
       error: (e) => {
-        console.error(e)
+        console.error("Error fetching trends:", e)
       }
     })
-
-
   }
-
 
   ngAfterViewInit(): void {
     this.createChart();
+    this.updateChart();
   }
 
-  back(){
+  back() {
     this.location.back()
   }
 
   createChart() {
-
-    const ctx = document.getElementById('lineChart') as any;
+    const ctx = document.getElementById('lineChart') as HTMLCanvasElement;
+    if (!ctx) return;
 
     this.chart = new Chart(ctx, {
       type: 'bar',
@@ -77,7 +73,7 @@ export class BookingTrendComponent implements OnInit, AfterViewInit {
           tooltip: {
             callbacks: {
               label: function (context) {
-                return  'Rs.' + context.raw ;
+                return 'Rs.' + context.raw;
               }
             }
           }
@@ -92,23 +88,21 @@ export class BookingTrendComponent implements OnInit, AfterViewInit {
   }
 
   updateChart() {
-    if (!this.data || !this.chart) return;
+    if (!this.data || !Array.isArray(this.data) || !this.chart) return;
 
-    const months = this.data.map((d:any) => {
-      const month = new Date(d._id).toLocaleString('default',{month:'long'})
-      const year = new Date(d._id).getFullYear()
-      return {...d , month , year}
-    })
+    const months = this.data.map((d: any) => {
+      const dateObj = d._id ? new Date(d._id) : new Date();
+      const month = isNaN(dateObj.getTime()) ? 'N/A' : dateObj.toLocaleString('default', { month: 'long' });
+      const year = isNaN(dateObj.getTime()) ? '' : dateObj.getFullYear();
+      return { ...d, month, year };
+    });
 
-    const labels = months.map((data: any) => data.month+','+data.year)
-    const values = this.data.map((data: any) => data.totalRevenue)
-    console.log(labels)
-    console.log('month...',months)
-    
+    const labels = months.map((data: any) => data.year ? `${data.month}, ${data.year}` : data.month);
+    const values = this.data.map((data: any) => data.totalRevenue || 0);
+
     this.chart.data.labels = labels;
     this.chart.data.datasets[0].data = values;
 
     this.chart.update();
   }
-
 }

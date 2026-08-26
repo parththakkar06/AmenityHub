@@ -1,4 +1,3 @@
-
 <div class="page-container">
 <button class="back-btn-glass" (click)="back()">
   <span>←</span>
@@ -39,11 +38,11 @@
 
   <div class="bookings-list">
 
-    @for (booking of bookings; track booking) {
+    @for (booking of bookings; track $index) {
 
       @if (
         activeTab === 'all' ||
-        booking.status === activeTab
+        booking?.status === activeTab
       ) {
 
         <div class="booking-card">
@@ -51,31 +50,31 @@
           <div class="booking-info">
 
             <div class="top-row">
-              <h3>{{ booking.userId.name }}</h3>
+              <h3>{{ booking?.userId?.name || 'Unknown User' }}</h3>
 
-              <span class="status" [ngClass]="booking.status">
-                {{ booking.status }}
+              <span class="status" [ngClass]="booking?.status">
+                {{ booking?.status }}
               </span>
             </div>
 
-            <p class="sub">
-              Block {{ booking.userId.address.blockNo }},
-              Flat {{ booking.userId.address.flatNo }}
+            <p class="sub" *ngIf="booking?.userId?.address">
+              Block {{ booking?.userId?.address?.blockNo }},
+              Flat {{ booking?.userId?.address?.flatNo }}
             </p>
 
-            <p><strong>Amenity:</strong> {{ booking.amenityId.name }}</p>
+            <p><strong>Amenity:</strong> {{ booking?.amenityId?.name || 'N/A' }}</p>
 
             <p>
               <strong>Time:</strong>
-              {{ booking.startTime | date:'shortTime' }} -
-              {{ booking.endTime | date:'shortTime' }}
+              {{ booking?.startTime | date:'shortTime' }} -
+              {{ booking?.endTime | date:'shortTime' }}
             </p>
 
-            <p><strong>Date:</strong> {{ booking.date | date:'mediumDate' }}</p>
+            <p><strong>Date:</strong> {{ booking?.date | date:'mediumDate' }}</p>
 
           </div>
 
-          @if (booking.status === 'Pending') {
+          @if (booking?.status === 'Pending') {
             <div class="actions">
               <button class="accept-btn" (click)="sendStatus(booking._id,'accept')">✔</button>
               <button class="reject-btn" (click)="sendStatus(booking._id,'reject')">✖</button>
@@ -86,6 +85,10 @@
 
       }
 
+    } @empty {
+      <div class="empty-state" style="padding: 40px; text-align: center; color: #94a3b8;">
+        <p>No bookings found.</p>
+      </div>
     }
 
   </div>

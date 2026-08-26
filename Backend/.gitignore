@@ -1,0 +1,69 @@
+# Dependency directories
+node_modules/
+**/node_modules/
+jspm_packages/
+web_modules/
+
+# Angular build output & cache
+.angular/
+**/.angular/
+dist/
+**/dist/
+out-tsc/
+.sass-cache/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment & Secret files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+*.pem
+*.key
+!*.env.example
+!*.env.template
+
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+*.swo
+
+# Diagnostic logs & testing
+coverage/
+**/coverage/
+.nyc_output/
+.karma/
+
+# Temporary files & uploads
+tmp/
+temp/
+uploads/
+*.tmp

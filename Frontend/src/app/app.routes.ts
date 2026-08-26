@@ -20,6 +20,11 @@ import { isLoggedInGuard } from './guards/is-logged-in.guard';
 
 export const routes: Routes = [
     {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+    },
+    {
         path: 'login',
         component: LoginComponent,
         canActivate: [isLoggedInGuard]

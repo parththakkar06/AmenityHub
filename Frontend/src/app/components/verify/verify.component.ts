@@ -19,10 +19,13 @@ export class VerifyComponent {
   user : any = ''
   constructor(private toast : ToastService,private userService: UserService, private router: Router, private saveUser : SaveuserService) {
     const nav = this.router.getCurrentNavigation()
-    const user : any = nav?.extras?.state
-    console.log(user)
-    this.mail = user['email']
-    this.user = user
+    const userState: any = nav?.extras?.state || history.state
+    if (userState && userState.email) {
+      this.mail = userState.email
+      this.user = userState
+    } else {
+      this.router.navigate(['/login'])
+    }
   }
 
   // ngOnInit() {

@@ -8,37 +8,38 @@ import { Location } from '@angular/common';
   templateUrl: './amenity-utilization.component.html',
   styleUrl: './amenity-utilization.component.css'
 })
-export class AmenityUtilizationComponent {
+export class AmenityUtilizationComponent implements OnInit, AfterViewInit {
 
-  constructor(private location : Location,private amenityService: AmenitiesService) { }
+  constructor(private location: Location, private amenityService: AmenitiesService) { }
 
-  data: any;
+  data: any = {};
   chart: any;
 
   ngOnInit() {
     this.amenityService.summary().subscribe({
-      next: (val) => {
-        this.data = val;
-        this.data = this.data.data
-        console.log(this.data)
-
-        if (this.chart) {
-          this.updateChart();
-        }
+      next: (val: any) => {
+        this.data = val?.data || val || {};
+        console.log("Fetched summary:", this.data)
+        this.updateChart();
+      },
+      error: (err) => {
+        console.error("Error fetching summary:", err)
       }
     });
   }
 
   ngAfterViewInit(): void {
     this.createChart();
+    this.updateChart();
   }
+
   back() {
     this.location.back()
   }
 
   createChart() {
-
-    const ctx = document.getElementById('lineChart') as any;
+    const ctx = document.getElementById('lineChart') as HTMLCanvasElement;
+    if (!ctx) return;
 
     this.chart = new Chart(ctx, {
       type: 'bar',
@@ -84,7 +85,6 @@ export class AmenityUtilizationComponent {
       }
     });
   }
-
 
   updateChart() {
     if (!this.data || !this.chart) return;
