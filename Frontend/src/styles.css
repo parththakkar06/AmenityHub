@@ -1,4 +1,337 @@
-/* You can add global styles to this file, and also import other style files */
+/* ==========================================================================
+   AmenityHub - Deep Forest & Burnt Terracotta Design System Tokens
+   ========================================================================== */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+:root {
+  /* 1. Deep Forest & Terracotta Palette */
+  --primitive-forest-900: #162E22;
+  --primitive-forest-800: #1F3D2E; /* Primary Deep Forest Green */
+  --primitive-forest-700: #294F3C;
+  --primitive-forest-100: #E2EBE5;
+  --primitive-forest-50:  #F0F5F2;
+  
+  --primitive-terracotta-700: #A04419; /* Hover Terracotta */
+  --primitive-terracotta-600: #C05621; /* Accent Burnt Terracotta */
+  --primitive-terracotta-500: #DD6B20;
+  --primitive-terracotta-100: #FEEBC8;
+  --primitive-terracotta-50:  #FFFAF0;
+
+  --primitive-cream-50:  #FAF6EE; /* Warm Cream Background */
+  --primitive-cream-100: #F3EDDE;
+  --primitive-cream-200: #E7E2D8; /* Border Neutral */
+  
+  --primitive-charcoal-900: #22221F; /* Primary Charcoal Text */
+  --primitive-charcoal-600: #52524E; /* Secondary Body Text */
+  --primitive-charcoal-400: #8C8C85;
+
+  --primitive-red-700: #7F1D1D; /* Dark Red Hover */
+  --primitive-red-600: #991B1B; /* Destructive Red */
+
+  /* 2. Semantic Color Tokens */
+  --color-primary: var(--primitive-forest-800);
+  --color-primary-hover: var(--primitive-forest-900);
+  --color-on-primary: #FFFFFF;
+  
+  --color-accent: var(--primitive-terracotta-600);
+  --color-accent-hover: var(--primitive-terracotta-700);
+  --color-on-accent: #FFFFFF;
+  
+  --color-background: var(--primitive-cream-50);
+  --color-foreground: var(--primitive-charcoal-900);
+  
+  --color-card: #FFFFFF;
+  --color-card-foreground: var(--primitive-charcoal-900);
+  
+  --color-muted: var(--primitive-cream-100);
+  --color-muted-foreground: var(--primitive-charcoal-600);
+  
+  --color-border: var(--primitive-cream-200);
+
+  --color-destructive: var(--primitive-red-600);
+  --color-destructive-hover: var(--primitive-red-700);
+  --color-on-destructive: #FFFFFF;
+  
+  --color-ring: var(--primitive-terracotta-600);
+
+  /* Status Badge Palette */
+  --color-status-pending-bg: #FEF9C3;
+  --color-status-pending-text: #854D0E;
+  --color-status-accepted-bg: #DCFCE7;
+  --color-status-accepted-text: #166534;
+  --color-status-rejected-bg: #FEE2E2;
+  --color-status-rejected-text: #991B1B;
+
+  /* 3. Typography Tokens (Fraunces Serif Headings + Inter Sans Body) */
+  --font-heading: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 2.125rem;   /* 34px */
+  --text-4xl: 2.75rem;    /* 44px */
+
+  /* 4. Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* 5. Elevation Shadows */
+  --shadow-sm: 0 1px 3px 0 rgba(34, 34, 31, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(34, 34, 31, 0.08), 0 2px 4px -2px rgba(34, 34, 31, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(34, 34, 31, 0.1), 0 4px 6px -4px rgba(34, 34, 31, 0.05);
+  --shadow-xl: 0 20px 32px -6px rgba(34, 34, 31, 0.12);
+
+  /* 6. Border Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* 7. Animations & Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base resets & typography */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-foreground);
+  margin-top: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--space-md);
+  color: var(--color-muted-foreground);
+}
+
+/* Interactive elements & Focus ring accessibility */
+a, button, input, select, textarea {
+  font-family: var(--font-body);
+  font-size: inherit;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Focus rings for keyboard accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible) {
+  outline: none;
+}
+
+button,
+[role="button"],
+.btn,
+.nav-link {
+  cursor: pointer;
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   GLOBAL FORM SUBMIT & PRIMARY BUTTON STYLING (Shared across all forms)
+   ========================================================================== */
+.submit-btn,
+.btn-primary,
+button[type="submit"]:not(.terracotta-btn):not(.btn) {
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: 12px var(--space-md);
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: #1F3D2E !important; /* Solid Forest Green #1F3D2E */
+  color: #FFFFFF !important;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  box-shadow: 0 2px 6px rgba(31, 61, 46, 0.25);
+  transition: all var(--transition-fast);
+}
+
+.submit-btn:hover:not(:disabled),
+.btn-primary:hover:not(:disabled),
+button[type="submit"]:not(.terracotta-btn):not(.btn):hover:not(:disabled) {
+  background-color: #162E22 !important; /* #162E22 Darker Forest Green */
+  box-shadow: 0 4px 12px rgba(31, 61, 46, 0.35);
+  transform: translateY(-1px);
+}
+
+.submit-btn:active:not(:disabled),
+.btn-primary:active:not(:disabled),
+button[type="submit"]:not(.terracotta-btn):not(.btn):active:not(:disabled) {
+  background-color: #0E1F16 !important;
+  transform: translateY(0) scale(0.99);
+  box-shadow: 0 1px 3px rgba(31, 61, 46, 0.2);
+}
+
+.submit-btn:focus-visible,
+.btn-primary:focus-visible,
+button[type="submit"]:not(.terracotta-btn):not(.btn):focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* WARM CREAM-NEUTRAL DISABLED STATE (Never lavender-blue) */
+.submit-btn:disabled,
+.btn-primary:disabled,
+button[type="submit"]:disabled {
+  background-color: #EFECE6 !important;
+  color: #A09D96 !important;
+  border: 1px solid #DFDBCF !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   GLOBAL ANGULAR MATERIAL CDK DROPDOWN / MAT-MENU THEME OVERRIDES
+   ========================================================================== */
+.mat-mdc-menu-panel,
+.mat-menu-panel {
+  background-color: #FFFFFF !important;
+  border: 1px solid var(--primitive-cream-200) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
+  padding: 6px !important;
+  min-width: 220px !important;
+  overflow: hidden !important;
+}
+
+.mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+.menu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--primitive-cream-50);
+  border-radius: var(--radius-md);
+  margin-bottom: 4px;
+}
+
+.header-icon {
+  font-size: 24px;
+  color: var(--color-primary);
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-role-badge {
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: 0.06em;
+}
+
+.user-email {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-foreground);
+  word-break: break-all;
+}
+
+.menu-divider {
+  height: 1px;
+  background-color: var(--primitive-cream-200);
+  margin: 4px 0;
+}
+
+.menu-item {
+  font-family: var(--font-heading) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: 600 !important;
+  color: var(--color-foreground) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 8px 12px !important;
+  min-height: 40px !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  transition: background-color var(--transition-fast) !important;
+}
+
+.menu-item:hover {
+  background-color: var(--primitive-forest-50) !important;
+  color: var(--color-primary) !important;
+}
+
+.item-icon {
+  font-size: 18px !important;
+  color: var(--color-primary) !important;
+}
+
+.menu-item.logout-item:hover {
+  background-color: var(--primitive-red-100) !important;
+}
+
+.item-icon.logout,
+.item-label.logout {
+  color: var(--primitive-red-600) !important;
+}

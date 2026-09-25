@@ -1,17 +1,64 @@
-<body>
-<div class="mid">
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <span class="auth-badge">Welcome Back</span>
+      <h2>Sign in to AmenityHub</h2>
+      <p class="auth-subtitle">Manage society bookings and facility access</p>
+    </div>
 
-    <form #loginForm="ngForm" (ngSubmit)="sendDetails(loginForm.value)">
-        <h2>Login</h2>
+    <form #loginForm="ngForm" (ngSubmit)="sendDetails(loginForm.value)" class="auth-form">
+      
+      <div class="form-group">
+        <label for="loginEmail">Email Address</label>
+        <div class="input-wrapper">
+          <span class="material-icons input-icon">email</span>
+          <input 
+            id="loginEmail"
+            type="email" 
+            #email="ngModel" 
+            placeholder="you@example.com" 
+            ngModel 
+            name="email" 
+            required 
+            email
+            class="form-control"
+          />
+        </div>
+        <small class="error-msg" *ngIf="email.invalid && (email.touched || email.dirty)">
+          <span class="material-icons error-icon">error_outline</span> Please enter a valid email address
+        </small>
+      </div>
 
-        <input type="email" #email="ngModel" placeholder="Email" ngModel name="email" required email/><br>
-        <span class="error" *ngIf="email.invalid && (email.touched || email.dirty)">Please Enter valid email</span>
-        <br>
-        <input type="password" #password="ngModel" placeholder="Password" ngModel name="password" required minlength="6"/>
-        <span class="error" *ngIf="password.invalid && password.touched">Please Enter valid Password</span>
-        <br>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <div class="input-wrapper">
+          <span class="material-icons input-icon">lock</span>
+          <input 
+            id="loginPassword"
+            type="password" 
+            #password="ngModel" 
+            placeholder="••••••••" 
+            ngModel 
+            name="password" 
+            required 
+            minlength="6"
+            class="form-control"
+          />
+        </div>
+        <small class="error-msg" *ngIf="password.invalid && password.touched">
+          <span class="material-icons error-icon">error_outline</span> Password must be at least 6 characters
+        </small>
+      </div>
 
-        <button class="btn" type="submit" [disabled]="loginForm.invalid">Login</button>
+      <button class="submit-btn" type="submit" [disabled]="loginForm.invalid">
+        <span>Login</span>
+        <span class="material-icons">arrow_forward</span>
+      </button>
+
+      <div class="auth-footer">
+        <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+      </div>
+
     </form>
+  </div>
 </div>
-</body>

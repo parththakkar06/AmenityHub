@@ -1,103 +1,151 @@
-body {
-  margin: 0;
-  height: 80vh;
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(135deg, #eef2ff, #f8fafc);
+.otp-container {
+  min-height: calc(100vh - 100px);
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.otp-container {
-  width: 100%;
-  max-width: 400px;
-  padding: 20px;
+  padding: var(--space-xl) var(--space-md);
+  background: radial-gradient(circle at top left, var(--primitive-blue-50), var(--color-background));
 }
 
 .otp-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  padding: 30px 25px;
-  border-radius: 18px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  width: 100%;
+  max-width: 400px;
+  padding: var(--space-xl);
+  border-radius: var(--radius-xl);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xl);
   text-align: center;
+}
+
+.otp-header {
+  margin-bottom: var(--space-lg);
+}
+
+.auth-badge {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--primitive-blue-50);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-xs);
+  border: 1px solid var(--primitive-blue-100);
 }
 
 .otp-card h2 {
-  margin-bottom: 10px;
-  color: #1e293b;
+  font-size: var(--text-2xl);
+  margin-bottom: 4px;
 }
 
 .subtitle {
-  font-size: 13px;
-  color: #64748b;
-  margin-bottom: 20px;
+  font-size: var(--text-xs);
+  color: var(--color-muted-foreground);
+  margin: 0;
 }
 
-/* OTP Input */
+.form-group {
+  margin-bottom: var(--space-md);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 20px;
+  color: var(--color-muted-foreground);
+}
+
 .otp-input {
-  width: 90%;
-  padding: 14px;
-  font-size: 18px;
-  letter-spacing: 6px;
-  text-align: center;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  outline: none;
-  transition: 0.25s;
-}
-
-/* Focus */
-.otp-input:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
-}
-
-/* Error */
-.error {
-  display: block;
-  margin-top: 8px;
-  font-size: 12px;
-  color: #ef4444;
-}
-
-/* Button */
-.verify-btn {
   width: 100%;
-  margin-top: 18px;
-  padding: 12px;
-  border-radius: 12px;
-  border: none;
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
-  color: white;
-  font-size: 15px;
-  cursor: pointer;
-  transition: 0.25s;
+  padding: 12px 12px 12px 42px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-align: center;
+  color: var(--color-foreground);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.verify-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 20px rgba(99,102,241,0.25);
+.otp-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-.verify-btn:disabled {
-  background: #cbd5f5;
-  cursor: not-allowed;
-}
-
-/* Resend */
-.resend {
-  margin-top: 15px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.resend span {
-  color: #4f46e5;
-  cursor: pointer;
+.error-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  color: var(--color-destructive);
+  font-size: var(--text-xs);
+  margin-top: 6px;
   font-weight: 500;
 }
 
-.resend span:hover {
+.error-icon {
+  font-size: 14px;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  transition: background-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.resend-row {
+  margin-top: var(--space-lg);
+  font-size: var(--text-xs);
+  color: var(--color-muted-foreground);
+}
+
+.resend-row p {
+  margin: 0;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: var(--text-xs);
   text-decoration: underline;
+}
+
+.link-btn:hover {
+  color: var(--color-primary-hover);
 }

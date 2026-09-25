@@ -112,10 +112,12 @@ const amenityUtilized = async (req, res) => {
     const output = {}
 
     time.forEach(b => {
-        if (!output[b.amenityId.name]) {
-            output[b.amenityId.name] = 0
+        if (b.amenityId && b.amenityId.name) {
+            if (!output[b.amenityId.name]) {
+                output[b.amenityId.name] = 0
+            }
+            output[b.amenityId.name] += b.diff
         }
-        output[b.amenityId.name] += b.diff
     })
 
     console.log(output)
@@ -126,64 +128,76 @@ const amenityUtilized = async (req, res) => {
 }
 
 const trend = async (req, res) => {
-    const trend = await BookingModel.aggregate([
-        {
-            $match: {
-                status: "Accepted"
-            }
-        },
-        {
-            $lookup: {
-                from: "amenities",
-                localField: "amenityId",
-                foreignField: "_id",
-                as: "amenity"
-            }
-        },
-        {
-            $unwind: "$amenity"
-        },
-        {
-            $addFields: {
-                durationHours: {
-                    $divide: [
-                        { $subtract: ["$endTime", "$startTime"] },
-                        1000 * 60 * 60
-                    ]
+    try {
+        const trend = await BookingModel.aggregate([
+            {
+                $match: {
+                    status: "Accepted"
+                }
+            },
+            {
+                $lookup: {
+                    from: "amenities",
+                    localField: "amenityId",
+                    foreignField: "_id",
+                    as: "amenity"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$amenity",
+                    preserveNullAndEmptyArrays: true
+                }
+            },
+            {
+                $addFields: {
+                    bookingRevenue: {
+                        $cond: {
+                            if: { $gt: ["$bookingAmount", 0] },
+                            then: "$bookingAmount",
+                            else: {
+                                $multiply: [
+                                    {
+                                        $divide: [
+                                            { $subtract: ["$endTime", "$startTime"] },
+                                            1000 * 60 * 60
+                                        ]
+                                    },
+                                    { $ifNull: ["$amenity.pricePerHour", 0] }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$date" },
+                        month: { $month: "$date" }
+                    },
+                    totalRevenue: { $sum: "$bookingRevenue" },
+                    totalBookings: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    "_id.year": 1,
+                    "_id.month": 1
                 }
             }
-        },
-        {
-            $addFields: {
-                revenue: {
-                    $multiply: ["$durationHours", "$amenity.pricePerHour"]
-                }
-            }
-        },
-        {
-            $group: {
-                _id: "$date",
-                totalRevenue: { $sum: "$revenue" }
-            }
-        },
-        {
-            $project: {
-                _id: 1,
-                totalRevenue: 1,
-                date : 1
-            }
-        },
-        {
-            $sort: {
-                "_id": 1,
-            }
-        }
-    ])
+        ])
 
-    res.json({
-        message: "sent booking trends!",
-        data: trend
-    })
+        res.json({
+            message: "sent booking trends!",
+            data: trend
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Error fetching trends",
+            error: error.message
+        })
+    }
 }
 
 module.exports = {

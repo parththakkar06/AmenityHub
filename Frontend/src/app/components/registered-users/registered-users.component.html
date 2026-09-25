@@ -1,38 +1,59 @@
-<button class="back-btn-glass" (click)="back()">
-  <span>←</span>
-</button>
 <div class="page-container">
+  
+  <button class="back-btn-glass" (click)="back()" aria-label="Back to Dashboard">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Dashboard</span>
+  </button>
 
-  <div class="page-header">
-    <h2>Registered Users</h2>
-  </div>
+  <header class="page-header">
+    <div>
+      <span class="header-badge">Resident Directory</span>
+      <h2>Registered Users</h2>
+      <p class="header-sub">View list of residents registered on AmenityHub</p>
+    </div>
+    <span class="count-badge">{{ users.length }} Residents</span>
+  </header>
 
   <div class="users-grid">
-
     @for (user of users; track $index) {
-      <div class="user-card">
+      <article class="user-card">
 
-        <div class="user-main">
-          <h3>{{ user?.name }}</h3>
-          <span class="role">{{ user?.roleId?.role || user?.role || 'USER' }}</span>
+        <div class="user-avatar-row">
+          <div class="avatar-circle">
+            <span class="material-icons">person</span>
+          </div>
+          <div class="user-main">
+            <h3 class="user-name">{{ user?.name }}</h3>
+            <span class="role-badge" [class.admin]="user?.role === 'ADMIN' || user?.roleId?.role === 'ADMIN'">
+              {{ user?.roleId?.role || user?.role || 'USER' }}
+            </span>
+          </div>
         </div>
 
         <div class="user-details">
-          <p>{{ user?.email }}</p>
-          <p>{{ user?.phone }}</p>
+          <div class="detail-item">
+            <span class="material-icons detail-icon">email</span>
+            <span class="detail-text">{{ user?.email }}</span>
+          </div>
+          <div class="detail-item" *ngIf="user?.phone">
+            <span class="material-icons detail-icon">phone</span>
+            <span class="detail-text">{{ user?.phone }}</span>
+          </div>
         </div>
 
         <div class="user-address" *ngIf="user?.address">
-          Block {{ user?.address?.blockNo }}, Flat {{ user?.address?.flatNo }}
+          <span class="material-icons detail-icon">home</span>
+          <span>Block {{ user?.address?.blockNo }}, Flat {{ user?.address?.flatNo }}</span>
         </div>
 
-      </div>
+      </article>
     } @empty {
-      <div class="empty-state" style="padding: 40px; text-align: center; color: #94a3b8;">
-        <p>No registered users found.</p>
+      <div class="empty-state">
+        <span class="material-icons empty-icon">group_off</span>
+        <h3>No Registered Users Found</h3>
+        <p>No residents found in the system directory.</p>
       </div>
     }
-
   </div>
 
 </div>

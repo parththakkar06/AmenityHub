@@ -1,62 +1,75 @@
-<button class="back-btn-glass" (click)="back()">
-  <span>←</span>
-</button>
-<div class="form-container">
+<div class="page-container">
 
-  <h2>Add Amenity</h2>
+  <button class="back-btn-glass" (click)="back()" aria-label="Go back">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Dashboard</span>
+  </button>
 
-  <form [formGroup]="amenityForm" (ngSubmit)="submit(this.amenityForm.value)">
+  <div class="form-card">
 
-    <div class="form-grid">
-
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" formControlName="name" placeholder="Enter amenity name">
-      </div>
-
-      <div class="form-group">
-        <label>Price per Hour (₹)</label>
-        <input type="number" formControlName="pricePerHour">
-      </div>
-
-      <div class="form-group">
-        <label>Capacity</label>
-        <input type="number" formControlName="capacity">
-      </div>
-
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" formControlName="location">
-      </div>
-
+    <div class="form-header">
+      <span class="header-badge">Admin Control</span>
+      <h2>@if(amenityId){Edit Amenity Facility}@else{Add New Amenity}</h2>
+      <p class="header-sub">Configure facility parameters, hourly pricing, and booking rules</p>
     </div>
 
-    <div class="form-group full">
-      <label>Description</label>
-      <textarea formControlName="description" rows="3"></textarea>
-    </div>
+    <form [formGroup]="amenityForm" (ngSubmit)="submit(this.amenityForm.value)">
 
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Opening Time</label>
-        <input type="number" formControlName="openingTime" placeholder="e.g. 6">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="amenityName">Amenity Name</label>
+          <input id="amenityName" type="text" formControlName="name" placeholder="e.g. Badminton Court A" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="amenityPrice">Price per Hour (₹)</label>
+          <input id="amenityPrice" type="number" formControlName="pricePerHour" placeholder="e.g. 250" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="amenityCapacity">Capacity (People)</label>
+          <input id="amenityCapacity" type="number" formControlName="capacity" placeholder="e.g. 10" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="amenityLocation">Location / Block</label>
+          <input id="amenityLocation" type="text" formControlName="location" placeholder="e.g. Clubhouse Floor 2" class="form-control">
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Closing Time</label>
-        <input type="number" formControlName="closingTime" placeholder="e.g. 22">
+      <div class="form-group full">
+        <label for="amenityDesc">Description</label>
+        <textarea id="amenityDesc" formControlName="description" rows="3" placeholder="Provide details about equipment, layout, etc." class="form-control"></textarea>
       </div>
-    </div>
 
-    <div class="form-group full">
-      <label>Rules (comma separated)</label>
-      <input type="text" formControlName="rules" placeholder="No smoking, No food">
-    </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="openTime">Opening Time (24h format)</label>
+          <input id="openTime" type="number" formControlName="openingTime" placeholder="e.g. 6" class="form-control">
+        </div>
 
-    <div class="form-actions">
-      <button type="submit">@if(amenityId){Update Amenity}@else{Add Amenity}</button>
-    </div>
+        <div class="form-group">
+          <label for="closeTime">Closing Time (24h format)</label>
+          <input id="closeTime" type="number" formControlName="closingTime" placeholder="e.g. 22" class="form-control">
+        </div>
+      </div>
 
-  </form>
+      <div class="form-group full">
+        <label for="amenityRules">Rules & Guidelines</label>
+        <input id="amenityRules" type="text" formControlName="rules" placeholder="Proper sports shoes required, No food inside" class="form-control">
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="submit-btn" [disabled]="amenityForm.invalid">
+          <span>@if(amenityId){Update Amenity}@else{Save & Publish Amenity}</span>
+          <span class="material-icons">arrow_forward</span>
+        </button>
+      </div>
+
+    </form>
+
+  </div>
 
 </div>

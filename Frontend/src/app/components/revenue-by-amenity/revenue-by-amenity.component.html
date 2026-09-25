@@ -1,35 +1,51 @@
-<button class="back-btn-glass" (click)="back()">
-  <span>←</span>
-</button>
-<div class="revenue-container">
+<div class="page-container">
+  
+  <button class="back-btn-glass" (click)="back()" aria-label="Back to Dashboard">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Dashboard</span>
+  </button>
 
-  <h2>Total Revenue per Amenity</h2>
+  <header class="page-header">
+    <div>
+      <span class="header-badge">Financial Analytics</span>
+      <h2 class="page-title">Revenue Breakdown</h2>
+      <p class="header-sub">Earnings and booking volume breakdown per amenity facility</p>
+    </div>
+  </header>
 
-  <table class="revenue-table" *ngIf="revenue?.length; else noData">
-    <thead>
-      <tr>
-        <th>Amenity</th>
-        <th>Total Bookings</th>
-        <th>Total Revenue (₹)</th>
-      </tr>
-    </thead>
+  <!-- Data Table Card -->
+  <div class="table-card" *ngIf="revenue && revenue.length > 0">
+    <table class="revenue-table">
+      <thead>
+        <tr>
+          <th>Amenity Facility</th>
+          <th>Total Bookings</th>
+          <th class="text-right">Total Revenue (₹)</th>
+        </tr>
+      </thead>
 
-    <tbody>
-      <tr *ngFor="let item of revenue">
-        <td>{{ item.amenityName }}</td>
-        <td>{{ item.totalBookings }}</td>
-        <td>{{ item.totalRevenue | number }}</td>
-      </tr>
-      <tr style="background-color: whitesmoke;">
-        <td><strong style="font-size: x-large;">Total Overall Revenue</strong></td>
-        <td></td>
-        <td style="font-size: x-large;">{{overallRevenue}}</td>
-      </tr>
-    </tbody>
-  </table>
+      <tbody>
+        <tr *ngFor="let item of revenue">
+          <td class="font-medium">{{ item.amenityName }}</td>
+          <td>
+            <span class="bookings-pill">{{ item.totalBookings }} Bookings</span>
+          </td>
+          <td class="text-right revenue-val">₹{{ item.totalRevenue | number }}</td>
+        </tr>
+        <tr class="total-row">
+          <td><strong>Total Overall Revenue</strong></td>
+          <td></td>
+          <td class="text-right total-val">₹{{ overallRevenue | number }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <ng-template #noData>
-    <p class="no-data">No revenue data available.</p>
-  </ng-template>
+  <!-- Empty State (Only renders if fetch completed and 0 records returned) -->
+  <div class="empty-state" *ngIf="isLoaded && (!revenue || revenue.length === 0)">
+    <span class="material-icons empty-icon">payments</span>
+    <h3>No Revenue Data Available</h3>
+    <p>There are no accepted booking revenues recorded yet.</p>
+  </div>
 
 </div>

@@ -1,11 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
 import { CommonModule, Location } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-booking',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin-booking.component.html',
   styleUrl: './admin-booking.component.css'
 })
@@ -15,6 +16,21 @@ export class AdminBookingComponent implements OnInit {
   totalbookings: any = 0
   approvedbookings: any = 0
   rejectedbookings: any = 0
+
+  // Cancellation Modal state
+  showRejectModal = false
+  selectedBookingForReject: any = null
+  rejectReason = ''
+  rejectReasonError = ''
+  isSubmittingReject = false
+
+  presetReasons: string[] = [
+    'Facility Under Maintenance',
+    'Schedule Conflict',
+    'Society Event Scheduled',
+    'Payment / Verification Issue',
+    'Amenity Policy Violation'
+  ]
 
   constructor(
     private location: Location,
@@ -31,6 +47,64 @@ export class AdminBookingComponent implements OnInit {
     this.location.back()
   }
 
+  openRejectModal(booking: any) {
+    this.selectedBookingForReject = booking
+    this.rejectReason = ''
+    this.rejectReasonError = ''
+    this.isSubmittingReject = false
+    this.showRejectModal = true
+    this.cdr.detectChanges()
+  }
+
+  closeRejectModal() {
+    this.showRejectModal = false
+    this.selectedBookingForReject = null
+    this.rejectReason = ''
+    this.rejectReasonError = ''
+    this.isSubmittingReject = false
+    this.cdr.detectChanges()
+  }
+
+  selectPresetReason(reason: string) {
+    this.rejectReason = reason
+    this.rejectReasonError = ''
+    this.cdr.detectChanges()
+  }
+
+  confirmReject() {
+    const trimmed = this.rejectReason.trim()
+    if (!trimmed) {
+      this.rejectReasonError = 'Please provide or select a cancellation reason.'
+      return
+    }
+    if (trimmed.length < 3) {
+      this.rejectReasonError = 'Cancellation reason must be at least 3 characters.'
+      return
+    }
+
+    if (!this.selectedBookingForReject?._id) return
+
+    this.isSubmittingReject = true
+    const payload = {
+      status: 'Rejected',
+      cancelReason: trimmed,
+      rejectionReason: trimmed
+    }
+
+    this.bookingService.sendStatus(this.selectedBookingForReject._id, payload).subscribe({
+      next: () => {
+        this.closeRejectModal()
+        this.getBookings()
+      },
+      error: (err) => {
+        console.error('Error rejecting booking:', err)
+        this.rejectReasonError = 'Failed to reject booking. Please try again.'
+        this.isSubmittingReject = false
+        this.cdr.detectChanges()
+      }
+    })
+  }
+
   sendStatus(id: string, stat: string) {
     if (stat === 'accept') {
       const status = { status: "Accepted" }
@@ -40,10 +114,12 @@ export class AdminBookingComponent implements OnInit {
     }
 
     if (stat === 'reject') {
-      const status = { status: "Rejected" }
-      this.bookingService.sendStatus(id, status).subscribe(() => {
-        this.getBookings()
-      })
+      const booking = this.bookings.find(b => b._id === id)
+      if (booking) {
+        this.openRejectModal(booking)
+      } else {
+        this.openRejectModal({ _id: id })
+      }
     }
   }
 

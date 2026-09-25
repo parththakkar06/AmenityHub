@@ -1,33 +1,54 @@
-<div class="page-container">
-<button class="back-btn-glass" (click)="back()">
-  <span>←</span>
-</button>
-  <div class="page-header">
-    <h2>All Bookings</h2>
+<div class="admin-booking-wrapper">
+  
+  <button class="back-btn-glass" (click)="back()" aria-label="Back to Dashboard">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Dashboard</span>
+  </button>
+
+  <header class="page-header">
+    <div>
+      <span class="header-badge">Admin Reservation Management</span>
+      <h2>All Society Bookings</h2>
+      <p class="header-sub">Review, approve, or reject resident amenity reservations</p>
+    </div>
+  </header>
+
+  <!-- Summary Metric Cards -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <span class="summary-label">Total Reservations</span>
+      <p class="summary-val">{{ totalbookings }}</p>
+    </div>
+    <div class="summary-card approved">
+      <span class="summary-label">Approved</span>
+      <p class="summary-val">{{ approvedbookings }}</p>
+    </div>
+    <div class="summary-card rejected">
+      <span class="summary-label">Rejected</span>
+      <p class="summary-val">{{ rejectedbookings }}</p>
+    </div>
   </div>
 
+  <!-- Filter Tabs -->
   <div class="tabs">
     <button 
       class="tab" 
       [class.active]="activeTab === 'all'" 
       (click)="activeTab = 'all'">
-      All
+      All Bookings
     </button>
-
     <button 
       class="tab" 
       [class.active]="activeTab === 'Pending'" 
       (click)="activeTab = 'Pending'">
-      Pending
+      Pending Approval
     </button>
-
     <button 
       class="tab" 
       [class.active]="activeTab === 'Accepted'" 
       (click)="activeTab = 'Accepted'">
       Approved
     </button>
-
     <button 
       class="tab" 
       [class.active]="activeTab === 'Rejected'" 
@@ -37,80 +58,188 @@
   </div>
 
   <div class="bookings-list">
-
     @for (booking of bookings; track $index) {
+      @if (activeTab === 'all' || booking?.status === activeTab) {
+        <article class="booking-card">
 
-      @if (
-        activeTab === 'all' ||
-        booking?.status === activeTab
-      ) {
-
-        <div class="booking-card">
-
-          <div class="booking-info">
-
+          <div class="card-content">
             <div class="top-row">
-              <h3>{{ booking?.userId?.name || 'Unknown User' }}</h3>
+              <div class="user-details">
+                <span class="material-icons user-icon">account_circle</span>
+                <div>
+                  <h3 class="user-name">{{ booking?.userId?.name || 'Resident User' }}</h3>
+                  <p class="address-tag" *ngIf="booking?.userId?.address">
+                    Block {{ booking?.userId?.address?.blockNo }}, Flat {{ booking?.userId?.address?.flatNo }}
+                  </p>
+                </div>
+              </div>
 
-              <span class="status" [ngClass]="booking?.status">
-                {{ booking?.status }}
+              <span class="status-badge" [ngClass]="booking?.status ? booking.status.toLowerCase() : 'pending'">
+                <span class="status-dot"></span>
+                {{ booking?.status || 'Pending' }}
               </span>
             </div>
 
-            <p class="sub" *ngIf="booking?.userId?.address">
-              Block {{ booking?.userId?.address?.blockNo }},
-              Flat {{ booking?.userId?.address?.flatNo }}
-            </p>
+            <div class="meta-row">
+              <div class="meta-item">
+                <span class="meta-label">Amenity</span>
+                <p class="meta-value highlight">{{ booking?.amenityId?.name || 'N/A' }}</p>
+              </div>
 
-            <p><strong>Amenity:</strong> {{ booking?.amenityId?.name || 'N/A' }}</p>
+              <div class="meta-item">
+                <span class="meta-label">Date</span>
+                <p class="meta-value">{{ booking?.date | date:'mediumDate' }}</p>
+              </div>
 
-            <p>
-              <strong>Time:</strong>
-              {{ booking?.startTime | date:'shortTime' }} -
-              {{ booking?.endTime | date:'shortTime' }}
-            </p>
+              <div class="meta-item">
+                <span class="meta-label">Slot Time</span>
+                <p class="meta-value">
+                  {{ booking?.startTime | date:'shortTime' }} - {{ booking?.endTime | date:'shortTime' }}
+                </p>
+              </div>
 
-            <p><strong>Date:</strong> {{ booking?.date | date:'mediumDate' }}</p>
+              <div class="meta-item">
+                <span class="meta-label">Attendees</span>
+                <p class="meta-value">
+                  {{ booking?.residentsCount || 1 }} Res<span *ngIf="booking?.guestsCount">, {{ booking?.guestsCount }} Guest</span>
+                </p>
+              </div>
 
+              <div class="meta-item" *ngIf="booking?.bookingAmount !== undefined">
+                <span class="meta-label">Amount</span>
+                <p class="meta-value amount-highlight">₹{{ booking?.bookingAmount }}</p>
+              </div>
+
+              <div class="meta-item" *ngIf="booking?.paymentMethod">
+                <span class="meta-label">Payment</span>
+                <p class="meta-value payment-badge-val">
+                  <span class="material-icons pill-icon">verified</span>
+                  {{ booking?.paymentMethod }} ({{ booking?.paymentStatus || 'Paid' }})
+                </p>
+              </div>
+            </div>
+
+            @if (booking?.status === 'Rejected' && (booking?.cancelReason || booking?.rejectionReason)) {
+              <div class="admin-cancel-reason">
+                <span class="material-icons cancel-icon">cancel</span>
+                <div class="reason-details">
+                  <span class="reason-label">Cancellation Reason:</span>
+                  <p class="reason-text">{{ booking?.cancelReason || booking?.rejectionReason }}</p>
+                </div>
+              </div>
+            }
           </div>
 
           @if (booking?.status === 'Pending') {
-            <div class="actions">
-              <button class="accept-btn" (click)="sendStatus(booking._id,'accept')">✔</button>
-              <button class="reject-btn" (click)="sendStatus(booking._id,'reject')">✖</button>
+            <div class="action-buttons">
+              <button class="action-btn accept" (click)="sendStatus(booking._id, 'accept')" aria-label="Approve booking">
+                <span class="material-icons">check</span>
+                <span>Approve</span>
+              </button>
+              <button class="action-btn reject" (click)="openRejectModal(booking)" aria-label="Reject booking">
+                <span class="material-icons">close</span>
+                <span>Reject</span>
+              </button>
             </div>
           }
 
-        </div>
-
+        </article>
       }
-
     } @empty {
-      <div class="empty-state" style="padding: 40px; text-align: center; color: #94a3b8;">
-        <p>No bookings found.</p>
+      <div class="empty-state">
+        <span class="material-icons empty-icon">event_busy</span>
+        <h3>No Bookings Found</h3>
+        <p>No bookings match the selected filter criteria.</p>
       </div>
     }
-
   </div>
 
-  <!-- SUMMARY -->
-  <div class="summary">
+  <!-- Rejection / Cancellation Modal -->
+  <div class="modal-overlay" *ngIf="showRejectModal" (click)="closeRejectModal()" tabindex="-1">
+    <div class="modal-dialog" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="rejectModalTitle">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <div class="modal-icon-badge">
+            <span class="material-icons">cancel</span>
+          </div>
+          <div>
+            <h3 id="rejectModalTitle" class="modal-title">Reject Booking Request</h3>
+            <p class="modal-subtitle">
+              Resident: <strong>{{ selectedBookingForReject?.userId?.name || 'Resident' }}</strong>
+            </p>
+          </div>
+        </div>
+        <button type="button" class="btn-close-modal" (click)="closeRejectModal()" aria-label="Close modal">
+          <span class="material-icons">close</span>
+        </button>
+      </div>
 
-    <div class="summary-card">
-      <h4>Total</h4>
-      <p>{{ totalbookings }}</p>
+      <div class="modal-body">
+        <div class="booking-summary-pill">
+          <div class="summary-pill-item">
+            <span class="material-icons pill-icon">place</span>
+            <span>{{ selectedBookingForReject?.amenityId?.name || 'Amenity' }}</span>
+          </div>
+          <div class="summary-pill-item">
+            <span class="material-icons pill-icon">event</span>
+            <span>{{ selectedBookingForReject?.date | date:'mediumDate' }}</span>
+          </div>
+          <div class="summary-pill-item">
+            <span class="material-icons pill-icon">schedule</span>
+            <span>
+              {{ selectedBookingForReject?.startTime | date:'shortTime' }} - {{ selectedBookingForReject?.endTime | date:'shortTime' }}
+            </span>
+          </div>
+        </div>
+
+        <label class="input-label" for="cancelReasonInput">
+          Reason for Cancellation <span class="required-star">*</span>
+        </label>
+        <p class="input-helper">Select a quick suggestion or type a reason that will be shown to the resident:</p>
+
+        <!-- Quick Reason Chips -->
+        <div class="preset-chips">
+          @for (preset of presetReasons; track preset) {
+            <button 
+              type="button" 
+              class="chip-btn" 
+              [class.chip-active]="rejectReason === preset"
+              (click)="selectPresetReason(preset)">
+              {{ preset }}
+            </button>
+          }
+        </div>
+
+        <!-- Textarea -->
+        <textarea 
+          id="cancelReasonInput"
+          class="reason-textarea"
+          rows="3"
+          placeholder="Enter reason for rejecting this booking request..."
+          [(ngModel)]="rejectReason"
+          (input)="rejectReasonError = ''">
+        </textarea>
+
+        <p class="error-msg" *ngIf="rejectReasonError">
+          <span class="material-icons error-icon">error</span>
+          {{ rejectReasonError }}
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" (click)="closeRejectModal()" [disabled]="isSubmittingReject">
+          Dismiss
+        </button>
+        <button 
+          type="button" 
+          class="btn-confirm-reject" 
+          (click)="confirmReject()" 
+          [disabled]="isSubmittingReject">
+          <span class="material-icons" *ngIf="!isSubmittingReject">close</span>
+          <span>{{ isSubmittingReject ? 'Rejecting...' : 'Confirm Rejection' }}</span>
+        </button>
+      </div>
     </div>
-
-    <div class="summary-card approved">
-      <h4>Approved</h4>
-      <p>{{ approvedbookings }}</p>
-    </div>
-
-    <div class="summary-card rejected">
-      <h4>Rejected</h4>
-      <p>{{ rejectedbookings }}</p>
-    </div>
-
   </div>
 
 </div>

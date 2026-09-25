@@ -1,76 +1,275 @@
-<div class="booking-container">
+<div class="booking-wrapper">
+  
+  <header class="page-header">
+    <span class="header-badge">PERSONAL DASHBOARD</span>
+    <h1 class="page-title">My Bookings</h1>
+    <p class="page-subtitle">Track your active reservations and view your booking history.</p>
+  </header>
 
-  <h2 class="heading">Bookings</h2>
-
-  @for (booking of bookings; track booking) {
-    <div class="booking-card">
-
-      <div class="card-left">
-        <div class="amenity">
-          {{ booking.amenityId.name }}
-        </div>
-
-        <div class="booking-meta">
-          <div class="meta-item">
-            <span>Date</span>
-            <p>{{ booking.date | date:'mediumDate' }}</p>
-          </div>
-
-          <div class="meta-item">
-            <span>Start</span>
-            <p>{{ booking.startTime | date:'shortTime' }}</p>
-          </div>
-
-          <div class="meta-item">
-            <span>End</span>
-            <p>{{ booking.endTime | date:'shortTime' }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card-right">
-        <span class="status-badge" [ngClass]="booking.status.toLowerCase()">
-          {{ booking.status }}
-        </span>
-      </div>
-
+  <!-- Active Reservations Section -->
+  <section class="booking-section">
+    <div class="section-title-row">
+      <h2 class="section-title">
+        <span class="material-icons title-icon">event_available</span> Active Reservations
+      </h2>
+      <span class="count-badge" *ngIf="activeBookings">{{ activeBookings.length }} Active</span>
     </div>
-  }
 
-  <h2 class="heading">Past Bookings</h2>
+    @for (booking of activeBookings; track $index) {
+      <article class="booking-card active-card">
 
-  @for (booking of pastbookings; track booking) {
-    <div class="booking-card">
+        <!-- 1. Left-aligned thumbnail (~84px square) -->
+        <img 
+          [src]="getAmenityImage(booking.amenityId?.name, $index)" 
+          [alt]="booking.amenityId?.name || 'Amenity'" 
+          class="booking-thumb" 
+        />
 
-      <div class="card-left">
-        <div class="amenity">
-          {{ booking.amenityId.name }}
+        <!-- 2. Middle info block (flex to fill width) -->
+        <div class="card-info">
+          <h3 class="amenity-title">
+            {{ booking.amenityId?.name || 'Amenity' }}
+          </h3>
+
+          <div class="booking-meta">
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">calendar_today</span> Date
+              </span>
+              <p class="meta-value">{{ booking.date | date:'mediumDate' }}</p>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">schedule</span> Slot Time
+              </span>
+              <p class="meta-value">
+                {{ booking.startTime | date:'shortTime' }} - {{ booking.endTime | date:'shortTime' }}
+              </p>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">groups</span> Attendees
+              </span>
+              <p class="meta-value">
+                {{ booking.residentsCount || 1 }} Res<span *ngIf="booking.guestsCount">, {{ booking.guestsCount }} Guest</span>
+              </p>
+            </div>
+
+            <div class="meta-item" *ngIf="booking.bookingAmount !== undefined">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">payments</span> Amount
+              </span>
+              <p class="meta-value amount-highlight">₹{{ booking.bookingAmount }}</p>
+            </div>
+          </div>
         </div>
 
-        <div class="booking-meta">
-          <div class="meta-item">
-            <span>Date</span>
-            <p>{{ booking.date | date:'mediumDate' }}</p>
-          </div>
-
-          <div class="meta-item">
-            <span>Start</span>
-            <p>{{ booking.startTime | date:'shortTime' }}</p>
-          </div>
-
-          <div class="meta-item">
-            <span>End</span>
-            <p>{{ booking.endTime | date:'shortTime' }}</p>
-          </div>
+        <!-- 3. Right status badge (existing Accepted/Pending styling intact) -->
+        <div class="card-right">
+          <span class="payment-method-pill" *ngIf="booking.paymentMethod">
+            <span class="material-icons pill-icon">verified</span>
+            {{ booking.paymentMethod }} • {{ booking.paymentStatus || 'Paid' }}
+          </span>
+          <span class="status-badge" [ngClass]="booking.status ? booking.status.toLowerCase() : 'pending'">
+            <span class="status-dot"></span>
+            {{ booking.status || 'Pending' }}
+          </span>
         </div>
-      </div>
 
-      <div class="card-right">
-        <span class="status-badge" [ngClass]="booking.status.toLowerCase()">
-          {{ booking.status }}
-        </span>
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <span class="material-icons empty-icon">event_note</span>
+        <h3>No Active Bookings</h3>
+        <p>You have no active reservations right now. Explore amenities to place a booking.</p>
       </div>
+    }
+  </section>
 
+  <!-- Dedicated Rejected Bookings Section -->
+  <section class="booking-section rejected-section">
+    <div class="section-title-row">
+      <h2 class="section-title">
+        <span class="material-icons title-icon rejected-title-icon">highlight_off</span> Rejected Bookings
+      </h2>
+      <span class="count-badge rejected-badge-count" *ngIf="rejectedBookings">{{ rejectedBookings.length }} Rejected</span>
     </div>
-  }
+
+    @for (booking of rejectedBookings; track $index) {
+      <article class="booking-card rejected-card">
+
+        <!-- Thumbnail -->
+        <img 
+          [src]="getAmenityImage(booking.amenityId?.name, $index)" 
+          [alt]="booking.amenityId?.name || 'Amenity'" 
+          class="booking-thumb" 
+        />
+
+        <!-- Info Block with Cancellation Reason -->
+        <div class="card-info">
+          <h3 class="amenity-title">
+            {{ booking.amenityId?.name || 'Amenity' }}
+          </h3>
+
+          <div class="booking-meta">
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">calendar_today</span> Date
+              </span>
+              <p class="meta-value">{{ booking.date | date:'mediumDate' }}</p>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">schedule</span> Slot Time
+              </span>
+              <p class="meta-value">
+                {{ booking.startTime | date:'shortTime' }} - {{ booking.endTime | date:'shortTime' }}
+              </p>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">groups</span> Attendees
+              </span>
+              <p class="meta-value">
+                {{ booking.residentsCount || 1 }} Res<span *ngIf="booking.guestsCount">, {{ booking.guestsCount }} Guest</span>
+              </p>
+            </div>
+
+            <div class="meta-item" *ngIf="booking.bookingAmount !== undefined">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">payments</span> Amount
+              </span>
+              <p class="meta-value amount-highlight">₹{{ booking.bookingAmount }}</p>
+            </div>
+          </div>
+
+          <!-- Highlighted Cancellation Reason Alert Box -->
+          <div class="cancel-reason-alert">
+            <span class="material-icons cancel-icon">error_outline</span>
+            <div class="cancel-text-group">
+              <span class="cancel-label">Reason for Cancellation</span>
+              <p class="cancel-val">{{ booking.cancelReason || booking.rejectionReason || 'No reason provided' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right status badge -->
+        <div class="card-right">
+          <span class="payment-method-pill" *ngIf="booking.paymentMethod">
+            <span class="material-icons pill-icon">verified</span>
+            {{ booking.paymentMethod }} • {{ booking.paymentStatus || 'Paid' }}
+          </span>
+          <span class="status-badge rejected">
+            <span class="status-dot"></span>
+            Rejected
+          </span>
+        </div>
+
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <span class="material-icons empty-icon">check_circle_outline</span>
+        <h3>No Rejected Bookings</h3>
+        <p>None of your reservations have been rejected.</p>
+      </div>
+    }
+  </section>
+
+  <!-- Past Bookings Section -->
+  <section class="booking-section history">
+    <div class="section-title-row">
+      <h2 class="section-title">
+        <span class="material-icons title-icon">history</span> Past Bookings
+      </h2>
+      <span class="count-badge muted" *ngIf="pastbookings">{{ pastbookings.length }} Past</span>
+    </div>
+
+    @for (booking of pastbookings; track $index) {
+      <article class="booking-card history-card">
+
+        <!-- 1. Left-aligned thumbnail (~84px square) -->
+        <img 
+          [src]="getAmenityImage(booking.amenityId?.name, $index)" 
+          [alt]="booking.amenityId?.name || 'Amenity'" 
+          class="booking-thumb" 
+        />
+
+        <!-- 2. Middle info block (flex to fill width) -->
+        <div class="card-info">
+          <h3 class="amenity-title">
+            {{ booking.amenityId?.name || 'Amenity' }}
+          </h3>
+
+          <div class="booking-meta">
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">calendar_today</span> Date
+              </span>
+              <p class="meta-value">{{ booking.date | date:'mediumDate' }}</p>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">schedule</span> Slot Time
+              </span>
+              <p class="meta-value">
+                {{ booking.startTime | date:'shortTime' }} - {{ booking.endTime | date:'shortTime' }}
+              </p>
+            </div>
+
+            <div class="meta-item">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">groups</span> Attendees
+              </span>
+              <p class="meta-value">
+                {{ booking.residentsCount || 1 }} Res<span *ngIf="booking.guestsCount">, {{ booking.guestsCount }} Guest</span>
+              </p>
+            </div>
+
+            <div class="meta-item" *ngIf="booking.bookingAmount !== undefined">
+              <span class="meta-label">
+                <span class="material-icons meta-icon">payments</span> Amount
+              </span>
+              <p class="meta-value amount-highlight">₹{{ booking.bookingAmount }}</p>
+            </div>
+          </div>
+
+          <!-- Cancellation Reason Alert (shown if rejected in past bookings) -->
+          @if (booking.status === 'Rejected' && (booking.cancelReason || booking.rejectionReason)) {
+            <div class="cancel-reason-alert">
+              <span class="material-icons cancel-icon">error_outline</span>
+              <div class="cancel-text-group">
+                <span class="cancel-label">Reason for Cancellation</span>
+                <p class="cancel-val">{{ booking.cancelReason || booking.rejectionReason }}</p>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- 3. Right status badge (existing Accepted styling intact) -->
+        <div class="card-right">
+          <span class="payment-method-pill" *ngIf="booking.paymentMethod">
+            <span class="material-icons pill-icon">verified</span>
+            {{ booking.paymentMethod }} • {{ booking.paymentStatus || 'Paid' }}
+          </span>
+          <span class="status-badge" [ngClass]="booking.status ? booking.status.toLowerCase() : 'accepted'">
+            <span class="status-dot"></span>
+            {{ booking.status || 'Completed' }}
+          </span>
+        </div>
+
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <span class="material-icons empty-icon">history_toggle_off</span>
+        <h3>No Past Bookings</h3>
+        <p>Your past completed or cancelled bookings will appear here.</p>
+      </div>
+    }
+  </section>
+
 </div>

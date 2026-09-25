@@ -1,30 +1,82 @@
-<div class="amenities-container">
-  @for (a of amenityList; track a) {
-    <div class="amenity-card">
+<div class="home-wrapper">
+  
+  <!-- Seamless Page Header Hero -->
+  <header class="page-hero">
+    <span class="hero-badge">ESTATE CONCIERGE</span>
+    <h1 class="hero-title">Explore & Book Amenities</h1>
+    <p class="hero-subtitle">Reserve clubhouse spaces, sports courts, and community facilities effortlessly.</p>
+  </header>
 
-      <div class="card-header">
-        <h3>{{ a.name }}</h3>
-        <span class="price">₹{{ a.pricePerHour }}/hr</span>
+  <!-- Amenities Grid: Featured 2x Wide Card + 2-Column Grid Below -->
+  <div class="amenities-grid">
+    @for (a of amenityList; track $index) {
+      <article class="amenity-card" [class.featured-card]="$index === 0">
+
+        <!-- Top / Left Image Element -->
+        <div class="card-image-wrapper">
+          <img [src]="getAmenityImage(a.name, $index)" [alt]="a.name" class="card-image" loading="lazy" />
+          
+          <span class="popular-pill" *ngIf="$index === 0">
+            <span class="material-icons tag-icon">star</span> MOST BOOKED
+          </span>
+
+          <span class="price-pill">
+            ₹{{ a.pricePerHour }}<small>/hr</small>
+          </span>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body">
+          <h2 class="amenity-title">{{ a.name }}</h2>
+          <p class="description">{{ a.description }}</p>
+
+          <!-- Flattened Inline Metadata -->
+          <div class="meta-inline-list">
+            <div class="meta-inline-item">
+              <span class="material-icons meta-icon">location_on</span>
+              <span class="meta-text">{{ a.location }}</span>
+            </div>
+
+            <div class="meta-inline-item">
+              <span class="material-icons meta-icon">groups</span>
+              <span class="meta-text">{{ a.capacity }} People Max</span>
+            </div>
+
+            <div class="meta-inline-item">
+              <span class="material-icons meta-icon">schedule</span>
+              <span class="meta-text">
+                {{ formatTime(a.availibility?.openingTime) }} - {{ formatTime(a.availibility?.closingTime) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Expandable Guidelines & Rules Accordion Row -->
+          <div class="rules-accordion" *ngIf="a.rules">
+            <button type="button" class="rules-toggle-btn" (click)="toggleRules($index, $event)">
+              <span class="material-icons rules-icon">info_outline</span>
+              <span class="rules-btn-label">Guidelines & Rules</span>
+              <span class="material-icons chevron-icon" [class.rotated]="expandedRules[$index]">expand_more</span>
+            </button>
+            <div class="rules-dropdown" *ngIf="expandedRules[$index]">
+              <p class="rules-text">{{ a.rules }}</p>
+            </div>
+          </div>
+
+          <!-- Burnt Terracotta Accent CTA Button -->
+          <button class="book-btn" (click)="bookNow(a)">
+            <span>Book Now</span>
+            <span class="material-icons btn-arrow">arrow_forward</span>
+          </button>
+        </div>
+
+      </article>
+    } @empty {
+      <div class="empty-state">
+        <span class="material-icons empty-icon">apartment</span>
+        <h3>No Amenities Available</h3>
+        <p>There are no active amenities configured for booking at this time.</p>
       </div>
+    }
+  </div>
 
-      <p class="description">{{ a.description }}</p>
-
-      <div class="details">
-        <span><strong>Location:</strong> {{ a.location }}</span>
-        <span><strong>Capacity:</strong> {{ a.capacity }} People</span>
-        <span>
-          <strong>Hours:</strong>
-          {{ a.availibility.openingTime }} - {{ a.availibility.closingTime }}
-        </span>
-      </div>
-
-      <div class="rules">
-        <strong>Rules:</strong>
-        <p>{{ a.rules }}</p>
-      </div>
-
-      <button class="book-btn" (click)="bookNow(a.name,a.pricePerHour)">Book Now</button>
-
-    </div>
-  }
 </div>

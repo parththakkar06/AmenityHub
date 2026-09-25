@@ -29,10 +29,34 @@ const BookingModel = new Schema({
         type: Number,
         required: true
     },
+    residentsCount: {
+        type: Number,
+        default: 1,
+        min: 1
+    },
+    guestsCount: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    paymentMethod: {
+        type: String,
+        enum: ['UPI', 'Card', 'Cash'],
+        default: 'UPI'
+    },
+    paymentStatus: {
+        type: String,
+        enum: ['Paid', 'Pending', 'Failed'],
+        default: 'Paid'
+    },
     status: {
         type: String,
         enum: ['Pending', 'Accepted', 'Rejected'],
         default: 'Pending'
+    },
+    cancelReason: {
+        type: String,
+        default: ''
     },
     rejectionReason: {
         type: String

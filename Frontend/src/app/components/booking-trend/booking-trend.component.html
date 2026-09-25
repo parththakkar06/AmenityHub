@@ -1,6 +1,53 @@
-<button class="back-btn-glass" (click)="back()">
-  <span>←</span>
-</button>
-<div class="chart-container">
-  <canvas id="lineChart"></canvas>
+<div class="page-container">
+  
+  <button class="back-btn-glass" (click)="back()" aria-label="Back to Dashboard">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Dashboard</span>
+  </button>
+
+  <header class="page-header">
+    <div>
+      <span class="header-badge">Financial Analytics</span>
+      <h2 class="page-title">Monthly Booking Trends</h2>
+      <p class="header-sub">Monthly revenue performance and reservation totals over time</p>
+    </div>
+  </header>
+
+  <!-- Metric Overview Cards -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <span class="metric-label">Total Monthly Earnings</span>
+      <p class="metric-val accent">₹{{ totalMonthlyRevenue | number }}</p>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Processed Monthly Bookings</span>
+      <p class="metric-val primary">{{ totalMonthlyBookings }} Bookings</p>
+    </div>
+  </div>
+
+  <!-- Chart Card Container -->
+  <div class="chart-card" *ngIf="data && data.length > 0">
+    <div class="chart-header">
+      <div class="chart-title-group">
+        <span class="material-icons chart-icon">bar_chart</span>
+        <h3>Monthly Revenue Generation</h3>
+      </div>
+      <div class="legend-badge">
+        <span class="legend-dot primary"></span> Regular Month
+        <span class="legend-dot accent"></span> Peak Revenue Month
+      </div>
+    </div>
+    
+    <div class="chart-canvas-wrapper">
+      <canvas id="lineChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="isLoaded && (!data || data.length === 0)">
+    <span class="material-icons empty-icon">insights</span>
+    <h3>No Trend Data Recorded</h3>
+    <p>There are no processed monthly revenue trends available yet.</p>
+  </div>
+
 </div>

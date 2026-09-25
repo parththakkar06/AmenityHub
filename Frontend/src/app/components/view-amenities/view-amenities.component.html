@@ -1,38 +1,56 @@
-<div class="page-container">
-<button class="back-btn-glass" (click)="back()">
-  <span>←</span>
-</button>
-  <div class="page-header">
-    <h2>All Amenities</h2>
-    <button class="add-btn" [routerLink]="'/dashboard/add-amenity'">+ Add Amenity</button>
-  </div>
+<div class="view-wrapper">
+  
+  <button class="back-btn-glass" (click)="back()" aria-label="Back to Dashboard">
+    <span class="material-icons">arrow_back</span>
+    <span>Back to Dashboard</span>
+  </button>
+
+  <header class="page-header">
+    <div>
+      <span class="header-badge">Admin Facility List</span>
+      <h2>All Society Amenities</h2>
+      <p class="header-sub">View, edit, and manage all configured amenities</p>
+    </div>
+    <button class="add-btn" [routerLink]="'/dashboard/add-amenity'">
+      <span class="material-icons">add</span>
+      <span>Add New Amenity</span>
+    </button>
+  </header>
 
   <div class="amenities-grid">
 
     @for (amenity of amenities; track $index) {
-      <div class="amenity-card">
+      <article class="amenity-card">
 
-        <div class="amenity-info">
-          <h3>{{ amenity?.name }}</h3>
-          <p class="desc">{{ amenity?.description }}</p>
-          <p class="desc" *ngIf="amenity?.availibility">
-            Open Hours: {{ formatTime(amenity.availibility.openingTime) }} - {{ formatTime(amenity.availibility.closingTime) }}
-          </p>
+        <div class="card-header-row">
+          <h3 class="amenity-title">{{ amenity?.name }}</h3>
+          <span class="price-tag">₹{{ amenity?.pricePerHour }}<small>/hr</small></span>
         </div>
 
-        <div class="amenity-meta">
-          <span>₹{{ amenity?.pricePerHour }} / hr</span>
+        <p class="desc">{{ amenity?.description }}</p>
+
+        <div class="meta-row" *ngIf="amenity?.availibility">
+          <span class="material-icons meta-icon">schedule</span>
+          <span>Hours: {{ formatTime(amenity.availibility.openingTime) }} - {{ formatTime(amenity.availibility.closingTime) }}</span>
         </div>
 
         <div class="actions">
-          <button class="edit-btn" (click)="editAmenity(amenity, amenity._id)">Edit</button>
-          <button class="delete-btn" (click)="deleteAmenity(amenity._id)">Delete</button>
+          <button class="edit-btn" (click)="editAmenity(amenity, amenity._id)">
+            <span class="material-icons">edit</span>
+            <span>Edit</span>
+          </button>
+          <button class="delete-btn" (click)="deleteAmenity(amenity._id)">
+            <span class="material-icons">delete_outline</span>
+            <span>Delete</span>
+          </button>
         </div>
 
-      </div>
+      </article>
     } @empty {
-      <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #94a3b8;">
-        <p>No amenities found. Click "+ Add Amenity" to create one.</p>
+      <div class="empty-state">
+        <span class="material-icons empty-icon">apartment</span>
+        <h3>No Amenities Found</h3>
+        <p>Click "+ Add New Amenity" above to create society facilities.</p>
       </div>
     }
 

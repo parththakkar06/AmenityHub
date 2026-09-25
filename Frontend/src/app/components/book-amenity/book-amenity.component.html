@@ -1,60 +1,447 @@
-<body>    
 <div class="booking-container">
-  <form [formGroup]="bookingForm" (ngSubmit)="beforeSubmit()" class="booking-form">
+  <form [formGroup]="bookingForm" (ngSubmit)="beforeSubmit()" class="booking-card">
 
-    <h2>Book Amenity</h2>
-
-    <div class="form-group">
-      <label>Amenity Name</label>
-      <input type="text" disabled value={{amenityName.name}}/>
+    <div class="form-header">
+      <span class="header-badge">RESERVATION CONCIERGE</span>
+      <h2 class="form-title">Book {{ amenityName.name || 'Amenity' }}</h2>
+      <p class="header-sub">Select date and duration for your booking</p>
     </div>
 
+    <!-- Locked / Read-Only Display Badge (Not an editable input box) -->
+    <div class="locked-amenity-badge">
+      <span class="material-icons badge-icon">apartment</span>
+      <div class="badge-content">
+        <span class="badge-label">SELECTED AMENITY</span>
+        <strong class="badge-value">{{ amenityName.name || 'Amenity Facility' }}</strong>
+      </div>
+      <span class="material-icons lock-icon" title="Locked Facility Selection">lock</span>
+    </div>
 
-    <div class="form-group">
-      <label>Date</label>
-      <input type="date" formControlName="date" />
-      <small *ngIf="date?.touched && date?.invalid">
-        Date is required
+    <!-- 1. Custom Styled Date Picker Field + Popup Calendar -->
+    <div class="form-group date-picker-group">
+      <label for="bookingDateInput">Select Date</label>
+      <div class="input-wrapper custom-picker-trigger" (click)="toggleCalendar($event)">
+        <span class="material-icons input-icon">event</span>
+        <input 
+          id="bookingDateInput" 
+          type="text" 
+          readonly 
+          [value]="selectedDateFormatted || 'Select Date'" 
+          class="form-control custom-picker-input" 
+        />
+        <span class="material-icons picker-chevron">calendar_month</span>
+      </div>
+
+      <!-- Custom Interactive Calendar Dropdown Card -->
+      <div class="calendar-popup" *ngIf="showCalendarPopup" (click)="$event.stopPropagation()">
+        <div class="calendar-header">
+          <button type="button" class="cal-nav-btn" (click)="prevMonth($event)">
+            <span class="material-icons">chevron_left</span>
+          </button>
+          <span class="cal-month-title">{{ currentCalendarMonth | date:'MMMM yyyy' }}</span>
+          <button type="button" class="cal-nav-btn" (click)="nextMonth($event)">
+            <span class="material-icons">chevron_right</span>
+          </button>
+        </div>
+
+        <div class="calendar-weekdays">
+          <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+        </div>
+
+        <div class="calendar-days-grid">
+          <button 
+            type="button"
+            *ngFor="let day of calendarDays" 
+            class="cal-day-btn"
+            [class.outside]="!day.isCurrentMonth"
+            [class.today]="day.isToday"
+            [class.past]="day.isPast"
+            [class.selected]="date?.value === day.dateString"
+            [disabled]="day.isPast"
+            (click)="selectCalendarDay(day, $event)">
+            {{ day.dayNum }}
+          </button>
+        </div>
+      </div>
+
+      <small class="error-msg" *ngIf="date?.touched && date?.invalid">
+        <span class="material-icons error-icon">error_outline</span> Date is required
       </small>
     </div>
 
+    <!-- 2. Custom 30-Minute Increment Time Slot Dropdowns -->
     <div class="form-row">
       <div class="form-group">
-        <label>Start Time</label>
-        <input type="time" formControlName="startTime" />
-        <small *ngIf="startTime?.touched && startTime?.invalid">
-          Required
+        <label for="startTimeSelect">Start Time</label>
+        <div class="input-wrapper">
+          <span class="material-icons input-icon">schedule</span>
+          <select id="startTimeSelect" formControlName="startTime" class="form-control custom-time-select">
+            <option value="" disabled selected>Start Time</option>
+            <option *ngFor="let slot of timeSlots" [value]="slot.value">
+              {{ slot.label }}
+            </option>
+          </select>
+          <span class="material-icons select-chevron">expand_more</span>
+        </div>
+        <small class="error-msg" *ngIf="startTime?.touched && startTime?.invalid">
+          <span class="material-icons error-icon">error_outline</span> Required
         </small>
       </div>
 
       <div class="form-group">
-        <label>End Time</label>
-        <input type="time" formControlName="endTime" />
-        <small *ngIf="endTime?.touched && endTime?.invalid">
-          Required
+        <label for="endTimeSelect">End Time</label>
+        <div class="input-wrapper">
+          <span class="material-icons input-icon">schedule</span>
+          <select id="endTimeSelect" formControlName="endTime" class="form-control custom-time-select">
+            <option value="" disabled selected>End Time</option>
+            <option *ngFor="let slot of timeSlots" [value]="slot.value">
+              {{ slot.label }}
+            </option>
+          </select>
+          <span class="material-icons select-chevron">expand_more</span>
+        </div>
+        <small class="error-msg" *ngIf="endTime?.touched && endTime?.invalid">
+          <span class="material-icons error-icon">error_outline</span> Required
         </small>
       </div>
     </div>
 
-    <button type="submit" [disabled]="bookingForm.invalid">
-      Confirm Booking
+    <!-- 3. Attendees & Guest Selection Section -->
+    <div class="attendees-section">
+      <div class="section-label-row">
+        <span class="attendees-title">Attendees & Guests</span>
+        <span class="attendees-sub">Specify number of residents & guests</span>
+      </div>
+
+      <div class="attendees-grid">
+        <!-- Residents Counter -->
+        <div class="counter-card">
+          <div class="counter-header">
+            <span class="material-icons counter-icon">person</span>
+            <div class="counter-text">
+              <span class="counter-title">Residents</span>
+              <span class="counter-rate">₹{{ pricingCalculation.basePrice }}/hr each</span>
+            </div>
+          </div>
+          <div class="stepper-controls">
+            <button 
+              type="button" 
+              class="stepper-btn" 
+              (click)="decrementResidents()" 
+              [disabled]="(residentsCount?.value || 1) <= 1"
+              aria-label="Decrease Residents">
+              <span class="material-icons">remove</span>
+            </button>
+            <input 
+              type="number" 
+              formControlName="residentsCount" 
+              min="1" 
+              class="stepper-input" 
+              readonly 
+            />
+            <button 
+              type="button" 
+              class="stepper-btn" 
+              (click)="incrementResidents()" 
+              aria-label="Increase Residents">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Guests Counter (1.5x Rate) -->
+        <div class="counter-card guest-card">
+          <div class="counter-header">
+            <span class="material-icons counter-icon guest-icon">group_add</span>
+            <div class="counter-text">
+              <span class="counter-title">
+                Guests
+                <span class="guest-multiplier-badge">1.5x</span>
+              </span>
+              <span class="counter-rate">₹{{ pricingCalculation.guestPriceRate }}/hr each</span>
+            </div>
+          </div>
+          <div class="stepper-controls">
+            <button 
+              type="button" 
+              class="stepper-btn" 
+              (click)="decrementGuests()" 
+              [disabled]="(guestsCount?.value || 0) <= 0"
+              aria-label="Decrease Guests">
+              <span class="material-icons">remove</span>
+            </button>
+            <input 
+              type="number" 
+              formControlName="guestsCount" 
+              min="0" 
+              class="stepper-input" 
+              readonly 
+            />
+            <button 
+              type="button" 
+              class="stepper-btn" 
+              (click)="incrementGuests()" 
+              aria-label="Increase Guests">
+              <span class="material-icons">add</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Dynamic Pricing Calculation Card -->
+      <div class="pricing-summary-card" *ngIf="pricingCalculation.hasValidTime">
+        <div class="pricing-summary-header">
+          <span class="material-icons pill-icon">receipt_long</span>
+          <span>Estimated Cost ({{ pricingCalculation.durationFormatted }})</span>
+        </div>
+        <div class="pricing-breakdown">
+          <div class="breakdown-item">
+            <span>{{ pricingCalculation.residents }} Resident(s):</span>
+            <strong>₹{{ pricingCalculation.residentTotal }}</strong>
+          </div>
+          <div class="breakdown-item" *ngIf="pricingCalculation.guests > 0">
+            <span>{{ pricingCalculation.guests }} Guest(s) (1.5x):</span>
+            <strong>₹{{ pricingCalculation.guestTotal }}</strong>
+          </div>
+          <div class="breakdown-divider"></div>
+          <div class="breakdown-total">
+            <span>Total Payable:</span>
+            <strong class="total-highlight">₹{{ pricingCalculation.grandTotal }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validation Check: Start vs End Time conflict -->
+    <small class="error-msg center-error" *ngIf="isTimeOrderInvalid && (startTime?.touched || endTime?.touched)">
+      <span class="material-icons error-icon">error_outline</span> End time must be after Start time
+    </small>
+
+    <!-- Burnt Terracotta Accent CTA Button -->
+    <button type="submit" class="submit-btn terracotta-btn" [disabled]="bookingForm.invalid || isTimeOrderInvalid">
+      <span>Proceed to Payment</span>
+      <span class="material-icons">payment</span>
     </button>
 
   </form>
 </div>
 
-</body>
+<!-- ==========================================================================
+     AMENITYHUB SECURE PAYMENT GATEWAY MODAL
+     ========================================================================== -->
+<div class="overlay" *ngIf="showPaymentModal" (click)="closePaymentModal()" tabindex="-1">
+  <div class="payment-modal-box" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="paymentDialogTitle">
 
-<div class="overlay" *ngIf="showConfirm">
-  <div class="confirm-box">
+    <!-- Modal Header -->
+    <div class="payment-modal-header">
+      <div class="header-left">
+        <span class="material-icons lock-shield-icon">verified_user</span>
+        <div>
+          <h3 id="paymentDialogTitle" class="payment-modal-title">AmenityHub Secure Pay</h3>
+          <span class="encryption-tag">256-Bit SSL Encrypted Dummy Gateway</span>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        class="close-modal-btn" 
+        *ngIf="paymentState !== 'processing'" 
+        (click)="closePaymentModal()" 
+        aria-label="Close Payment Modal">
+        <span class="material-icons">close</span>
+      </button>
+    </div>
 
-    <h3>{{ title }}</h3>
-    <p>{{ time }}</p>
-    <p>{{ amount }}</p>
+    <!-- STATE 1: SELECT PAYMENT METHOD & REVIEW -->
+    <div class="payment-modal-body" *ngIf="paymentState === 'select'">
+      
+      <!-- Left Column: Reservation Summary -->
+      <div class="payment-summary-col">
+        <span class="col-section-label">ORDER SUMMARY</span>
+        
+        <div class="summary-facility-card">
+          <span class="material-icons facility-icon">apartment</span>
+          <div class="facility-text">
+            <strong>{{ amenityName.name || 'Amenity Facility' }}</strong>
+            <span>{{ selectedDateFormatted }}</span>
+          </div>
+        </div>
 
-    <div class="actions">
-      <button class="cancel" (click)="onCancel()">Cancel</button>
-      <button class="confirm" (click)="onConfirm()">Confirm</button>
+        <div class="summary-line-items">
+          <div class="line-item">
+            <span>Time Slot</span>
+            <strong>{{ slotTime }}</strong>
+          </div>
+          <div class="line-item">
+            <span>Duration</span>
+            <strong>{{ duration }}</strong>
+          </div>
+          <div class="line-item">
+            <span>Residents ({{ confirmResidents }})</span>
+            <strong>{{ confirmResidentAmount }}</strong>
+          </div>
+          <div class="line-item" *ngIf="confirmGuests > 0">
+            <span>Guests ({{ confirmGuests }} &#64; 1.5x)</span>
+            <strong>{{ confirmGuestAmount }}</strong>
+          </div>
+        </div>
+
+        <div class="summary-total-banner">
+          <div class="total-label-group">
+            <span class="total-label">Total Payable</span>
+            <span class="total-sub">Includes all attendees</span>
+          </div>
+          <strong class="total-amount-val">{{ amount }}</strong>
+        </div>
+      </div>
+
+      <!-- Right Column: Payment Method Selection -->
+      <div class="payment-methods-col">
+        <span class="col-section-label">SELECT PAYMENT METHOD</span>
+
+        <!-- Method Selector Tabs -->
+        <div class="method-tabs">
+          <button 
+            type="button" 
+            class="method-tab" 
+            [class.active]="selectedPaymentMethod === 'UPI'" 
+            (click)="selectPaymentMethod('UPI')">
+            <span class="material-icons">qr_code_2</span>
+            <span>UPI / QR</span>
+          </button>
+
+          <button 
+            type="button" 
+            class="method-tab" 
+            [class.active]="selectedPaymentMethod === 'Card'" 
+            (click)="selectPaymentMethod('Card')">
+            <span class="material-icons">credit_card</span>
+            <span>Card</span>
+          </button>
+
+          <button 
+            type="button" 
+            class="method-tab" 
+            [class.active]="selectedPaymentMethod === 'Cash'" 
+            (click)="selectPaymentMethod('Cash')">
+            <span class="material-icons">account_balance_wallet</span>
+            <span>Cash Desk</span>
+          </button>
+        </div>
+
+        <!-- TAB CONTENT 1: UPI / QR -->
+        <div class="tab-pane upi-pane" *ngIf="selectedPaymentMethod === 'UPI'">
+          <div class="qr-code-wrapper">
+            <div class="qr-frame">
+              <!-- Stylized Vector QR Code -->
+              <svg viewBox="0 0 100 100" class="simulated-qr-svg">
+                <rect width="100" height="100" fill="#ffffff" rx="8"/>
+                <!-- Corner 1 -->
+                <rect x="10" y="10" width="22" height="22" fill="#1b4332" rx="3"/>
+                <rect x="14" y="14" width="14" height="14" fill="#ffffff"/>
+                <rect x="17" y="17" width="8" height="8" fill="#1b4332"/>
+                <!-- Corner 2 -->
+                <rect x="68" y="10" width="22" height="22" fill="#1b4332" rx="3"/>
+                <rect x="72" y="14" width="14" height="14" fill="#ffffff"/>
+                <rect x="75" y="17" width="8" height="8" fill="#1b4332"/>
+                <!-- Corner 3 -->
+                <rect x="10" y="68" width="22" height="22" fill="#1b4332" rx="3"/>
+                <rect x="14" y="72" width="14" height="14" fill="#ffffff"/>
+                <rect x="17" y="75" width="8" height="8" fill="#1b4332"/>
+                <!-- Data blocks -->
+                <rect x="36" y="12" width="6" height="6" fill="#2d6a4f"/>
+                <rect x="46" y="18" width="6" height="6" fill="#2d6a4f"/>
+                <rect x="56" y="12" width="6" height="6" fill="#2d6a4f"/>
+                <rect x="36" y="28" width="12" height="6" fill="#2d6a4f"/>
+                <rect x="52" y="28" width="10" height="10" fill="#2d6a4f"/>
+                <rect x="12" y="38" width="6" height="10" fill="#2d6a4f"/>
+                <rect x="22" y="44" width="8" height="6" fill="#2d6a4f"/>
+                <rect x="34" y="44" width="12" height="12" fill="#bc4749"/>
+                <rect x="50" y="44" width="8" height="6" fill="#2d6a4f"/>
+                <rect x="62" y="44" width="14" height="6" fill="#2d6a4f"/>
+                <rect x="80" y="38" width="8" height="8" fill="#2d6a4f"/>
+                <rect x="38" y="64" width="10" height="6" fill="#2d6a4f"/>
+                <rect x="52" y="60" width="8" height="12" fill="#2d6a4f"/>
+                <rect x="66" y="64" width="14" height="6" fill="#2d6a4f"/>
+                <rect x="38" y="76" width="6" height="12" fill="#2d6a4f"/>
+                <rect x="48" y="78" width="14" height="8" fill="#2d6a4f"/>
+                <rect x="68" y="76" width="10" height="12" fill="#2d6a4f"/>
+                <rect x="82" y="70" width="6" height="18" fill="#2d6a4f"/>
+                <!-- Center Badge -->
+                <circle cx="50" cy="50" r="11" fill="#1b4332"/>
+                <text x="50" y="53" font-size="7" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="sans-serif">UPI</text>
+              </svg>
+              <div class="qr-scan-line"></div>
+            </div>
+            <div class="qr-caption">
+              <span class="qr-inst">Scan to pay with any UPI App</span>
+              <div class="upi-apps-row">
+                <span class="upi-chip gpay">GPay</span>
+                <span class="upi-chip phonepe">PhonePe</span>
+                <span class="upi-chip paytm">Paytm</span>
+                <span class="upi-chip bhim">BHIM</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="upi-id-box">
+            <span class="upi-id-label">Simulated Society UPI ID:</span>
+            <span class="upi-id-val">{{ testUpiId }}</span>
+          </div>
+        </div>
+
+        <!-- TAB CONTENT 2: CARD -->
+        <div class="tab-pane card-pane" *ngIf="selectedPaymentMethod === 'Card'">
+          <!-- Virtual Credit Card Preview -->
+          <div class="virtual-card">
+            <div class="vcard-top">
+              <span class="material-icons vcard-chip">memory</span>
+              <span class="vcard-brand">VISA</span>
+            </div>
+            <div class="vcard-number">{{ cardDetails.number }}</div>
+            <div class="vcard-bottom">
+              <div>
+                <span class="vcard-label">CARD HOLDER</span>
+                <span class="vcard-val">{{ cardDetails.holder || 'RESIDENT' }}</span>
+              </div>
+              <div>
+                <span class="vcard-label">EXPIRES</span>
+                <span class="vcard-val">{{ cardDetails.expiry }}</span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="fill-test-card-btn" (click)="fillDemoCard()">
+            <span class="material-icons">auto_fix_high</span>
+            <span>Use Demo Test Card</span>
+          </button>
+        </div>
+
+        <!-- TAB CONTENT 3: CASH -->
+        <div class="tab-pane cash-pane" *ngIf="selectedPaymentMethod === 'Cash'">
+          <div class="cash-notice-box">
+            <span class="material-icons cash-icon">storefront</span>
+            <div class="cash-notice-text">
+              <strong>Pay at Society Management Office</strong>
+              <p>You can pay {{ amount }} in cash at the management desk prior to slot commencement. Your booking will be registered immediately.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment CTA Button -->
+        <div class="pay-action-group">
+          <button type="button" class="btn-pay-now" (click)="processPayment()" [disabled]="isSubmitting">
+            <span class="btn-spinner" *ngIf="isSubmitting"></span>
+            <span class="material-icons" *ngIf="!isSubmitting">lock</span>
+            <span>{{ isSubmitting ? 'Confirming Payment...' : ('Confirm & Pay ' + amount + ' via ' + selectedPaymentMethod) }}</span>
+          </button>
+          <span class="security-guarantee">
+            <span class="material-icons sec-icon">security</span>
+            Instant reservation confirmation • Society sandbox
+          </span>
+        </div>
+
+      </div>
+
     </div>
 
   </div>
